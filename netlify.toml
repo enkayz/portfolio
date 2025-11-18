@@ -2,10 +2,6 @@
   command = "npm run build"
   publish = "dist"
 
-[functions]
-  # Ensure assets referenced by functions are bundled for deploy
-  included_files = ["social_preview.png"]
-
 # Ensure client-side routing works with SPA fallback
 [[redirects]]
   from = "/social-preview.png"
