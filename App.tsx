@@ -25,7 +25,13 @@ const App: React.FC = () => {
   const handleClosePreview = useCallback(() => setShowPreview(false), []);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-green-400 font-mono relative overflow-hidden">
+    <div
+      className="min-h-screen bg-[#050505] text-green-400 font-mono relative overflow-hidden"
+      style={{
+        paddingTop: 'max(env(safe-area-inset-top), 0px)',
+        paddingBottom: 'max(env(safe-area-inset-bottom), 0px)',
+      }}
+    >
       <DynamicBackground />
       <div className="relative z-10 max-w-6xl mx-auto p-4 sm:p-8">
         {view === 'boot' && <BootSequence onComplete={handleBootComplete} />}
