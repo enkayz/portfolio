@@ -1,9 +1,9 @@
-import path from 'node:path';
-import sharp from 'sharp';
+const path = require('node:path');
+const sharp = require('sharp');
 
 const previewPath = path.join(__dirname, '..', '..', 'social_preview.png');
 
-export const handler = async () => {
+exports.handler = async () => {
   try {
     const imageBuffer = await sharp(previewPath).png().toBuffer();
 
