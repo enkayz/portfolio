@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { PROFILE_SUMMARY, SKILLS, EXPERIENCE, PROJECTS, CONTACT, ADDITIONAL_INFO } from '../constants';
 import { Experience } from '../types';
+import ShareLinks from './ShareLinks';
 
 interface HudDisplayProps {
   onEnterShell: () => void;
@@ -93,6 +94,11 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
             <ul className="list-disc list-inside text-gray-300 space-y-2">
                 {ADDITIONAL_INFO.map((info, i) => <li key={i}>{info}</li>)}
             </ul>
+        </section>
+
+        <section id="share">
+            <SectionTitle>Share</SectionTitle>
+            <ShareLinks />
         </section>
 
         <section id="contact">

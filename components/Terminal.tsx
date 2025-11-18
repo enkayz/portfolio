@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { HistoryItem } from '../types';
 import { PROFILE_SUMMARY, SKILLS, EXPERIENCE, PROJECTS, CONTACT, ADDITIONAL_INFO } from '../constants';
 import { Experience } from '../types';
+import ShareLinks from './ShareLinks';
 
 interface TerminalProps {
     onExit: () => void;
@@ -23,6 +24,7 @@ const renderHelp = () => (
             <li><span className="text-green-400 font-bold">contact</span> - Show contact information.</li>
             <li><span className="text-green-400 font-bold">more</span> - Additional information.</li>
             <li><span className="text-green-400 font-bold">all</span> - Display all sections.</li>
+            <li><span className="text-green-400 font-bold">share</span> - Get links to share this portfolio.</li>
             <li><span className="text-green-400 font-bold">exit</span> - Return to the Heads-Up Display.</li>
             <li><span className="text-green-400 font-bold">clear</span> - Clear the terminal screen.</li>
         </ul>
@@ -125,6 +127,13 @@ const renderAll = () => (
     </>
 );
 
+const renderShare = () => (
+    <div>
+        <SectionTitle>Share Portfolio</SectionTitle>
+        <ShareLinks />
+    </div>
+);
+
 const Terminal: React.FC<TerminalProps> = ({ onExit }) => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<HistoryItem[]>([
@@ -169,6 +178,9 @@ const Terminal: React.FC<TerminalProps> = ({ onExit }) => {
                 break;
             case 'all':
                 output = renderAll();
+                break;
+            case 'share':
+                output = renderShare();
                 break;
             case 'exit':
                 output = <p>Returning to Heads-Up Display...</p>;
