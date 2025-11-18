@@ -3,39 +3,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Updated Title -->
     <title>System 8 - Interactive DevOps Portfolio</title>
     
-    <!-- SEO & Social Sharing Meta Tags -->
+    <!-- Primary Meta Tags -->
     <meta name="description" content="Step inside the shell of a Senior DevOps & Systems Engineer. Explore 20+ years of experience in an interactive, retro-futuristic terminal. Press any key to begin..." />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="System 8 Interactive Portfolio" />
     <meta property="og:url" content="https://www.system8.com.au/" />
     <meta property="og:title" content="System 8 - Interactive DevOps Portfolio" />
     <meta property="og:description" content="Step inside the shell of a Senior DevOps & Systems Engineer. Explore 20+ years of experience in an interactive, retro-futuristic terminal. Press any key to begin..." />
     
-    <!-- Snappy Video Preview -->
-    <meta property="og:video" content="https://www.system8.com.au/social-preview.mp4" />
-    <meta property="og:video:secure_url" content="https://www.system8.com.au/social-preview.mp4" />
+    <!-- Snappy Video Preview (Used by Facebook, etc.) -->
+    <!-- NOTE: For this to work, you must place a short MP4 video named 'social-preview.mp4' in your project's root directory. -->
+    <meta property="og:video" content="/social-preview.mp4" />
+    <meta property="og:video:secure_url" content="/social-preview.mp4" />
     <meta property="og:video:type" content="video/mp4" />
     <meta property="og:video:width" content="1200" />
     <meta property="og:video:height" content="630" />
 
-    <!-- Fallback Image -->
-    <meta property="og:image" content="https://www.system8.com.au/social-preview.png" />
+    <!-- Fallback Image (Used if video fails or on platforms like LinkedIn) -->
+    <!-- NOTE: For this to work, you must generate your image with the 'preview' command and place the 'social_preview.png' file in your project's root directory. -->
+    <meta property="og:image" content="/social_preview.png" />
+    <meta property="og:image:secure_url" content="/social_preview.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="A retro-style terminal interface displaying a resume with green text on a dark background." />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://www.system8.com.au/" />
-    <meta property="twitter:title" content="System 8 - Interactive DevOps Portfolio" />
-    <meta property="twitter:description" content="Step inside the shell of a Senior DevOps & Systems Engineer. Explore 20+ years of experience in an interactive, retro-futuristic terminal. Press any key to begin..." />
-    <meta property="twitter:image" content="https://www.system8.com.au/social-preview.png" />
-    <meta property="twitter:image:alt" content="A retro-style terminal interface displaying a resume with green text on a dark background." />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.system8.com.au/" />
+    <meta name="twitter:title" content="System 8 - Interactive DevOps Portfolio" />
+    <meta name="twitter:description" content="Step inside the shell of a Senior DevOps & Systems Engineer. Explore 20+ years of experience in an interactive, retro-futuristic terminal. Press any key to begin..." />
+    <meta name="twitter:image" content="/social_preview.png" />
+    <meta name="twitter:image:alt" content="A retro-style terminal interface displaying a resume with green text on a dark background." />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+wFfsFPbLCGnLA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
