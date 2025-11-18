@@ -148,6 +148,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
 
     const triggerHaptics = useCallback(() => {
         if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
@@ -283,6 +284,15 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
         setInput('');
     };
 
+    const handleQuickAction = (command: string) => {
+        if (command === 'listen') {
+            isListening ? stopVoiceCapture() : startVoiceCapture();
+            return;
+        }
+        handleCommand(command);
+        inputRef.current?.focus();
+    };
+
     return (
         <div
             className="p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-green-400 text-sm sm:text-base flex flex-col"
@@ -342,9 +352,48 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
+                    inputMode="text"
+                    enterKeyHint="go"
                 />
                  <div className="inline-block h-4 w-2 bg-green-400 cursor-blink" />
             </form>
+
+            <div
+                className="md:hidden sticky bottom-0 left-0 right-0 -mx-4 mt-4 px-4 pb-4 pt-3 bg-black/70 backdrop-blur-lg border-t border-emerald-800/40"
+                style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}
+            >
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-emerald-200">Quick controls</p>
+                    <span className="text-[10px] text-gray-400">Tap to run a command</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {quickCommands.map((command) => (
+                        <button
+                            key={command}
+                            type="button"
+                            onClick={() => handleQuickAction(command)}
+                            className="px-3 py-2 text-xs rounded-lg bg-emerald-900/80 border border-emerald-700/60 text-white active:scale-95 transition-transform"
+                        >
+                            {command}
+                        </button>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => handleQuickAction('listen')}
+                        disabled={!voiceSupported}
+                        className="px-3 py-2 text-xs rounded-lg bg-cyan-900/80 border border-cyan-700/60 text-white active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isListening ? 'Stop mic' : 'Voice' }
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleQuickAction('clear')}
+                        className="px-3 py-2 text-xs rounded-lg bg-slate-900/80 border border-slate-700/60 text-white active:scale-95 transition-transform"
+                    >
+                        clear
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
