@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 
-const previewPath = new URL('../../social_preview.png', import.meta.url);
+const previewPath = path.join(process.cwd(), 'social_preview.png');
 
 export const handler = async () => {
   try {
