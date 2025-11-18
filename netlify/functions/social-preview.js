@@ -1,9 +1,6 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const previewPath = path.join(__dirname, '..', '..', 'social_preview.png');
 
 export const handler = async () => {
