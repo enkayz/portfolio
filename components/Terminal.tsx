@@ -149,6 +149,13 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
+
+    const triggerHaptics = useCallback(() => {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+            navigator.vibrate(12);
+        }
+    }, []);
 
     const quickCommands = [
         { label: 'Help', command: 'help' },
@@ -309,15 +316,13 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
         setInput('');
     };
 
-    const handleQuickCommand = (command: string) => {
+    const handleQuickAction = (command: string) => {
+        if (command === 'listen') {
+            isListening ? stopVoiceCapture() : startVoiceCapture();
+            return;
+        }
         handleCommand(command);
-        setInput('');
-        inputRef.current?.focus({ preventScroll: true } as any);
-    };
-
-    const handleInputFocus = () => {
-        inputRef.current?.focus({ preventScroll: true } as any);
-        triggerHaptics();
+        inputRef.current?.focus();
     };
 
     return (
