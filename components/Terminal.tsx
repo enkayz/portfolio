@@ -7,6 +7,7 @@ import ShareLinks from './ShareLinks';
 
 interface TerminalProps {
     onExit: () => void;
+    onTogglePreview: () => void;
 }
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -25,6 +26,7 @@ const renderHelp = () => (
             <li><span className="text-green-400 font-bold">more</span> - Additional information.</li>
             <li><span className="text-green-400 font-bold">all</span> - Display all sections.</li>
             <li><span className="text-green-400 font-bold">share</span> - Get links to share this portfolio.</li>
+            <li><span className="text-green-400 font-bold">preview</span> - Generate a custom social media preview image.</li>
             <li><span className="text-green-400 font-bold">exit</span> - Return to the Heads-Up Display.</li>
             <li><span className="text-green-400 font-bold">clear</span> - Clear the terminal screen.</li>
         </ul>
@@ -134,7 +136,7 @@ const renderShare = () => (
     </div>
 );
 
-const Terminal: React.FC<TerminalProps> = ({ onExit }) => {
+const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<HistoryItem[]>([
         { id: 0, output: <div><p>Welcome to System 8. Type <span className="text-yellow-400">'help'</span> to see available commands.</p></div> }
@@ -182,6 +184,11 @@ const Terminal: React.FC<TerminalProps> = ({ onExit }) => {
             case 'share':
                 output = renderShare();
                 break;
+            case 'preview':
+                output = <p>Opening social preview generator...</p>;
+                setHistory(prev => [...prev, { id: prev.length, command, output }]);
+                setTimeout(onTogglePreview, 500);
+                return;
             case 'exit':
                 output = <p>Returning to Heads-Up Display...</p>;
                 setHistory(prev => [...prev, { id: prev.length, command, output }]);
@@ -194,7 +201,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit }) => {
                 output = <p>Command not found: {command}. Type 'help' for a list of commands.</p>;
         }
         setHistory(prev => [...prev, { id: prev.length, command, output }]);
-    }, [onExit]);
+    }, [onExit, onTogglePreview]);
 
 
     const handleSubmit = (e: React.FormEvent) => {
