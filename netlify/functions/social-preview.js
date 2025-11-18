@@ -4,6 +4,14 @@ const WIDTH = 1200;
 const HEIGHT = 600;
 const DEFAULT_TITLE = 'Dylan Boekelman – Systems & DevOps Engineer';
 
+const escapeForXml = (value) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
 const createSvg = (title) => `
   <svg width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -34,9 +42,9 @@ const createSvg = (title) => `
       <text x="70" y="220" fill="#dbff00" font-family="'IBM Plex Mono', 'SFMono-Regular', 'Consolas', monospace" font-size="56" font-weight="700" letter-spacing="1">
         SYSTEM8 // SOCIAL PREVIEW
       </text>
-      <text x="70" y="300" fill="#a7ffeb" font-family="'Inter', 'Segoe UI', sans-serif" font-size="44" font-weight="600">${title}</text>
+      <text x="70" y="300" fill="#a7ffeb" font-family="'Inter', 'Segoe UI', sans-serif" font-size="44" font-weight="600">${escapeForXml(title)}</text>
       <text x="70" y="360" fill="#7cd7ff" font-family="'Inter', 'Segoe UI', sans-serif" font-size="32" font-weight="500">Dylan Boekelman</text>
-      <text x="70" y="408" fill="#c5d7e2" font-family="'Inter', 'Segoe UI', sans-serif" font-size="26" font-weight="400">Systems & DevOps Engineer · Telephony & Audio-Visual Technologist</text>
+      <text x="70" y="408" fill="#c5d7e2" font-family="'Inter', 'Segoe UI', sans-serif" font-size="26" font-weight="400">Systems &amp; DevOps Engineer · Telephony &amp; Audio-Visual Technologist</text>
     </g>
 
     <g transform="translate(${WIDTH - 470}, ${HEIGHT - 180})">
