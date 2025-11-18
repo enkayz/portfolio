@@ -26,6 +26,7 @@ const renderHelp = () => (
             <li><span className="text-green-400 font-bold">more</span> - Additional information.</li>
             <li><span className="text-green-400 font-bold">all</span> - Display all sections.</li>
             <li><span className="text-green-400 font-bold">share</span> - Get links to share this portfolio.</li>
+            <li><span className="text-green-400 font-bold">listen</span> - Use voice to issue a command.</li>
             <li><span className="text-green-400 font-bold">preview</span> - Generate a custom social media preview image.</li>
             <li><span className="text-green-400 font-bold">exit</span> - Return to the Heads-Up Display.</li>
             <li><span className="text-green-400 font-bold">clear</span> - Clear the terminal screen.</li>
@@ -141,8 +142,19 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const [history, setHistory] = useState<HistoryItem[]>([
         { id: 0, output: <div><p>Welcome to System 8. Type <span className="text-yellow-400">'help'</span> to see available commands.</p></div> }
     ]);
+    const [voiceSupported, setVoiceSupported] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [voiceTranscript, setVoiceTranscript] = useState('');
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
+
+    const triggerHaptics = useCallback(() => {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+            navigator.vibrate(12);
+        }
+    }, []);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -152,6 +164,24 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     
     useEffect(() => {
         inputRef.current?.focus();
+    }, []);
+
+    const startVoiceCapture = useCallback(() => {
+        if (!voiceSupported || !recognitionRef.current) {
+            return;
+        }
+        try {
+            setVoiceTranscript('');
+            recognitionRef.current.start();
+            setIsListening(true);
+        } catch (err) {
+            console.error(err);
+        }
+    }, [voiceSupported]);
+
+    const stopVoiceCapture = useCallback(() => {
+        recognitionRef.current?.stop();
+        setIsListening(false);
     }, []);
 
     const handleCommand = useCallback((command: string) => {
@@ -184,14 +214,24 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
             case 'share':
                 output = renderShare();
                 break;
+            case 'listen':
+                if (!voiceSupported) {
+                    output = <p>Voice commands are not supported in this browser.</p>;
+                    break;
+                }
+                output = <p>Listening for your command. Say anything from the help menu.</p>;
+                setTimeout(startVoiceCapture, 250);
+                break;
             case 'preview':
                 output = <p>Opening social preview generator...</p>;
                 setHistory(prev => [...prev, { id: prev.length, command, output }]);
+                triggerHaptics();
                 setTimeout(onTogglePreview, 500);
                 return;
             case 'exit':
                 output = <p>Returning to Heads-Up Display...</p>;
                 setHistory(prev => [...prev, { id: prev.length, command, output }]);
+                triggerHaptics();
                 setTimeout(onExit, 500);
                 return;
             case 'clear':
@@ -201,7 +241,40 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                 output = <p>Command not found: {command}. Type 'help' for a list of commands.</p>;
         }
         setHistory(prev => [...prev, { id: prev.length, command, output }]);
-    }, [onExit, onTogglePreview]);
+        triggerHaptics();
+    }, [onExit, onTogglePreview, startVoiceCapture, triggerHaptics, voiceSupported]);
+
+    useEffect(() => {
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            setVoiceSupported(false);
+            return;
+        }
+
+        const recognition: SpeechRecognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
+            const transcript = Array.from(event.results)
+                .map((result) => result[0].transcript)
+                .join(' ')
+                .trim();
+            setVoiceTranscript(transcript);
+            if (event.results[0]?.isFinal) {
+                setIsListening(false);
+                handleCommand(transcript);
+            }
+        };
+        recognition.onend = () => setIsListening(false);
+        recognition.onerror = () => setIsListening(false);
+        recognitionRef.current = recognition;
+        setVoiceSupported(true);
+
+        return () => {
+            recognitionRef.current?.stop();
+        };
+    }, [handleCommand]);
 
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -209,6 +282,15 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
         if (input.trim() === '') return;
         handleCommand(input);
         setInput('');
+    };
+
+    const handleQuickAction = (command: string) => {
+        if (command === 'listen') {
+            isListening ? stopVoiceCapture() : startVoiceCapture();
+            return;
+        }
+        handleCommand(command);
+        inputRef.current?.focus();
     };
 
     return (
@@ -229,6 +311,36 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     </div>
                 ))}
             </div>
+            <div className="flex items-center flex-wrap gap-3 mt-3 text-xs text-gray-300">
+                <div className="flex items-center gap-2 bg-teal-900/50 border border-teal-600/40 px-3 py-2 rounded">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <div>
+                        <p className="text-cyan-300 font-semibold uppercase">Neural Uplink</p>
+                        <p className="text-gray-400">Latency stabilized with adaptive beamforming.</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/70 border border-cyan-600/40 px-3 py-2 rounded">
+                    <span className={`h-2 w-2 rounded-full ${voiceSupported ? (isListening ? 'bg-green-400 animate-ping' : 'bg-cyan-300') : 'bg-gray-500'}`} />
+                    <div>
+                        <p className="text-cyan-300 font-semibold uppercase">Voice Link</p>
+                        <p className="text-gray-400">{voiceSupported ? (isListening ? 'Capturing command...' : 'Ready for activation.') : 'Unavailable in this environment.'}</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={isListening ? stopVoiceCapture : startVoiceCapture}
+                        disabled={!voiceSupported}
+                        className="ml-2 bg-teal-800 text-white px-3 py-1 rounded border border-teal-500/50 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    >
+                        {isListening ? 'Stop Listening' : 'Voice Command'}
+                    </button>
+                </div>
+                {voiceTranscript && (
+                    <div className="flex items-center gap-2 bg-black/60 border border-emerald-500/30 px-3 py-2 rounded text-[11px] tracking-tight">
+                        <span className="uppercase text-emerald-300 font-semibold">Captured</span>
+                        <span className="text-white">“{voiceTranscript}”</span>
+                    </div>
+                )}
+            </div>
             <form onSubmit={handleSubmit} className="flex items-center mt-2">
                 <span className="text-teal-400">system8@portfolio:~$</span>
                 <input
@@ -240,9 +352,48 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
+                    inputMode="text"
+                    enterKeyHint="go"
                 />
                  <div className="inline-block h-4 w-2 bg-green-400 cursor-blink" />
             </form>
+
+            <div
+                className="md:hidden sticky bottom-0 left-0 right-0 -mx-4 mt-4 px-4 pb-4 pt-3 bg-black/70 backdrop-blur-lg border-t border-emerald-800/40"
+                style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}
+            >
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-emerald-200">Quick controls</p>
+                    <span className="text-[10px] text-gray-400">Tap to run a command</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {quickCommands.map((command) => (
+                        <button
+                            key={command}
+                            type="button"
+                            onClick={() => handleQuickAction(command)}
+                            className="px-3 py-2 text-xs rounded-lg bg-emerald-900/80 border border-emerald-700/60 text-white active:scale-95 transition-transform"
+                        >
+                            {command}
+                        </button>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => handleQuickAction('listen')}
+                        disabled={!voiceSupported}
+                        className="px-3 py-2 text-xs rounded-lg bg-cyan-900/80 border border-cyan-700/60 text-white active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isListening ? 'Stop mic' : 'Voice' }
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleQuickAction('clear')}
+                        className="px-3 py-2 text-xs rounded-lg bg-slate-900/80 border border-slate-700/60 text-white active:scale-95 transition-transform"
+                    >
+                        clear
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
