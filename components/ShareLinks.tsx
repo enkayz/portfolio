@@ -1,14 +1,27 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const ShareLinks: React.FC = () => {
     const [copyText, setCopyText] = useState('Copy Link');
+    const [shareError, setShareError] = useState('');
+    const [shareHref, setShareHref] = useState('');
+    const shareSupported = useMemo(
+        () => typeof navigator !== 'undefined' && 'share' in navigator,
+        []
+    );
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        setShareHref(window.location.href);
+    }, []);
 
     const handleCopy = () => {
+        if (!shareHref) return;
+
         // Fallback for http contexts
         if (!navigator.clipboard) {
             const textArea = document.createElement("textarea");
-            textArea.value = window.location.href;
+            textArea.value = shareHref;
             textArea.style.position = "fixed"; // Avoid scrolling to bottom
             document.body.appendChild(textArea);
             textArea.focus();
@@ -26,7 +39,7 @@ const ShareLinks: React.FC = () => {
         }
 
         // Modern clipboard API for https contexts
-        navigator.clipboard.writeText(window.location.href).then(() => {
+        navigator.clipboard.writeText(shareHref).then(() => {
             setCopyText('Copied!');
             setTimeout(() => setCopyText('Copy Link'), 2000);
         }).catch(err => {
@@ -36,8 +49,24 @@ const ShareLinks: React.FC = () => {
         });
     };
     
-    const shareUrl = encodeURIComponent(window.location.href);
+    const shareUrl = encodeURIComponent(shareHref || 'https://www.system8.com.au');
     const shareText = encodeURIComponent("Check out this interactive portfolio for a Senior DevOps & Systems Engineer:");
+
+    const handleNativeShare = async () => {
+        if (!shareSupported || !shareHref) return;
+        setShareError('');
+        try {
+            await navigator.share({
+                title: 'System 8 Interactive Portfolio',
+                text: 'Check out this interactive portfolio for a Senior DevOps & Systems Engineer:',
+                url: shareHref,
+            });
+        } catch (error) {
+            if ((error as Error).name !== 'AbortError') {
+                setShareError('Share failed. Try the copy link option.');
+            }
+        }
+    };
 
     return (
         <div className="flex flex-wrap items-center gap-4 mt-2 text-gray-300">
@@ -47,6 +76,15 @@ const ShareLinks: React.FC = () => {
             <button onClick={handleCopy} className="bg-teal-800 text-teal-200 text-xs font-semibold px-3 py-1 rounded hover:bg-teal-700 transition-colors focus:outline-none">
                 {copyText}
             </button>
+            {shareSupported && (
+                <button
+                    onClick={handleNativeShare}
+                    className="bg-cyan-900 text-cyan-100 text-xs font-semibold px-3 py-1 rounded hover:bg-cyan-800 transition-colors border border-cyan-500/50"
+                >
+                    Share from device
+                </button>
+            )}
+            {shareError && <span className="text-xs text-red-300">{shareError}</span>}
         </div>
     );
 };
