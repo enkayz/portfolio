@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 import BootSequence from './components/BootSequence';
 import HudDisplay from './components/HudDisplay';
-import PreviewGenerator from './components/PreviewGenerator';
-import Terminal from './components/Terminal';
 import DynamicBackground from './components/DynamicBackground';
+const PreviewGenerator = React.lazy(() => import('./components/PreviewGenerator'));
+const Terminal = React.lazy(() => import('./components/Terminal'));
 
 type ViewState = 'boot' | 'hud' | 'terminal';
 
@@ -37,11 +37,17 @@ const App: React.FC = () => {
         {view === 'boot' && <BootSequence onComplete={handleBootComplete} />}
         {view === 'hud' && <HudDisplay onEnterShell={handleEnterShell} />}
         {view === 'terminal' && (
-          <Terminal onExit={handleExitShell} onTogglePreview={handleTogglePreview} />
+          <Suspense fallback={<div className="text-gray-400">Loading shell…</div>}>
+            <Terminal onExit={handleExitShell} onTogglePreview={handleTogglePreview} />
+          </Suspense>
         )}
       </div>
 
-      {showPreview && <PreviewGenerator onClose={handleClosePreview} />}
+      {showPreview && (
+        <Suspense fallback={<div className="fixed inset-0 bg-black/80 text-gray-300 flex items-center justify-center">Preparing preview…</div>}>
+          <PreviewGenerator onClose={handleClosePreview} />
+        </Suspense>
+      )}
     </div>
   );
 };

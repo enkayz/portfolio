@@ -2,9 +2,6 @@
 import React, { useState, useRef } from 'react';
 import og from '../og-config.json';
 
-// Forward declaration for html2canvas from CDN
-declare const html2canvas: any;
-
 interface PreviewGeneratorProps {
   onClose: () => void;
 }
@@ -14,27 +11,29 @@ const PreviewGenerator: React.FC<PreviewGeneratorProps> = ({ onClose }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const handleGenerate = () => {
-    if (previewRef.current && typeof html2canvas !== 'undefined') {
-      setIsGenerating(true);
-      html2canvas(previewRef.current, {
+  const handleGenerate = async () => {
+    if (!previewRef.current) {
+      console.error("preview ref is not available.");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const { default: html2canvas } = await import('html2canvas');
+      const canvas = await html2canvas(previewRef.current, {
         useCORS: true,
         backgroundColor: '#0a0a0a',
         width: 1200,
         height: 630,
         scale: 1,
-      }).then((canvas: HTMLCanvasElement) => {
-        const link = document.createElement('a');
-        link.download = 'system8-preview.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        setIsGenerating(false);
-      }).catch((err: any) => {
-        console.error("Failed to generate canvas:", err);
-        setIsGenerating(false);
       });
-    } else {
-        console.error("html2canvas is not loaded or preview ref is not available.");
+      const link = document.createElement('a');
+      link.download = 'system8-preview.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (err) {
+      console.error('Failed to generate canvas:', err);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
