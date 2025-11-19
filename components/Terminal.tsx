@@ -166,6 +166,13 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
+
+    const triggerHaptics = useCallback(() => {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+            navigator.vibrate(12);
+        }
+    }, []);
 
     const triggerHaptics = useHapticFeedback();
 
@@ -313,15 +320,13 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
         setInput('');
     };
 
-    const handleQuickCommand = (command: string) => {
+    const handleQuickAction = (command: string) => {
+        if (command === 'listen') {
+            isListening ? stopVoiceCapture() : startVoiceCapture();
+            return;
+        }
         handleCommand(command);
-        setInput('');
-        inputRef.current?.focus({ preventScroll: true } as any);
-    };
-
-    const handleInputFocus = () => {
-        inputRef.current?.focus({ preventScroll: true } as any);
-        triggerHaptics();
+        inputRef.current?.focus();
     };
 
     return (
@@ -373,7 +378,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     </div>
                 )}
             </div>
-            <form onSubmit={handleSubmit} className="flex items-center mt-2 bg-black/60 px-3 py-2 rounded-md border border-teal-700/30">
+            <form onSubmit={handleSubmit} className="flex items-center mt-2">
                 <span className="text-teal-400">system8@portfolio:~$</span>
                 <input
                     ref={inputRef}
@@ -384,68 +389,48 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
-                    enterKeyHint="send"
                     inputMode="text"
+                    enterKeyHint="go"
                 />
                  <div className="inline-block h-4 w-2 bg-green-400 cursor-blink" />
             </form>
 
-            {isMobile && (
-                <div className="fixed bottom-4 inset-x-3 sm:hidden z-20" role="group" aria-label="Mobile terminal controls">
-                    <div className="bg-slate-950/80 border border-teal-700/40 shadow-2xl rounded-xl backdrop-blur p-3 space-y-2">
-                        <div className="grid grid-cols-4 gap-2 text-[11px] text-white font-semibold">
-                            <button
-                                type="button"
-                                onClick={handleInputFocus}
-                                className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-teal-800/70 border border-teal-500/50 active:scale-[0.98] transition"
-                            >
-                                <span role="img" aria-hidden="true">⌨️</span>
-                                Focus
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleQuickCommand('share')}
-                                className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-cyan-800/70 border border-cyan-500/50 active:scale-[0.98] transition"
-                            >
-                                <span role="img" aria-hidden="true">📤</span>
-                                Share
-                            </button>
-                            <button
-                                type="button"
-                                onClick={isListening ? stopVoiceCapture : startVoiceCapture}
-                                disabled={!voiceSupported}
-                                className={`flex items-center justify-center gap-1 px-2 py-2 rounded-lg border active:scale-[0.98] transition ${voiceSupported ? 'bg-emerald-800/70 border-emerald-500/50' : 'bg-slate-800 border-slate-700 text-slate-400'}`}
-                            >
-                                <span role="img" aria-hidden="true">🎙️</span>
-                                {isListening ? 'Stop' : 'Listen'}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => handleQuickCommand('exit')}
-                                className="flex items-center justify-center gap-1 px-2 py-2 rounded-lg bg-rose-900/70 border border-rose-500/50 active:scale-[0.98] transition"
-                            >
-                                <span role="img" aria-hidden="true">↩️</span>
-                                Exit
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-3 gap-2 text-[11px] text-white font-semibold">
-                            {QUICK_COMMANDS.map(({ label, command }) => (
-                                <button
-                                    key={command}
-                                    type="button"
-                                    onClick={() => handleQuickCommand(command)}
-                                    className="px-2 py-2 rounded-lg bg-slate-800/70 border border-teal-600/40 active:scale-[0.98] transition"
-                                >
-                                    {label}
-                                </button>
-                            ))}
-                        </div>
-                        <p className="text-[10px] text-gray-300 text-center" aria-live="polite">
-                            {voiceSupported ? (isListening ? 'Listening for your next command…' : 'Tap a quick action or use the keyboard to issue a command.') : 'Voice controls unavailable on this device.'}
-                        </p>
-                    </div>
+            <div
+                className="md:hidden sticky bottom-0 left-0 right-0 -mx-4 mt-4 px-4 pb-4 pt-3 bg-black/70 backdrop-blur-lg border-t border-emerald-800/40"
+                style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}
+            >
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-emerald-200">Quick controls</p>
+                    <span className="text-[10px] text-gray-400">Tap to run a command</span>
                 </div>
-            )}
+                <div className="flex flex-wrap gap-2">
+                    {quickCommands.map((command) => (
+                        <button
+                            key={command}
+                            type="button"
+                            onClick={() => handleQuickAction(command)}
+                            className="px-3 py-2 text-xs rounded-lg bg-emerald-900/80 border border-emerald-700/60 text-white active:scale-95 transition-transform"
+                        >
+                            {command}
+                        </button>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => handleQuickAction('listen')}
+                        disabled={!voiceSupported}
+                        className="px-3 py-2 text-xs rounded-lg bg-cyan-900/80 border border-cyan-700/60 text-white active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isListening ? 'Stop mic' : 'Voice' }
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleQuickAction('clear')}
+                        className="px-3 py-2 text-xs rounded-lg bg-slate-900/80 border border-slate-700/60 text-white active:scale-95 transition-transform"
+                    >
+                        clear
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
