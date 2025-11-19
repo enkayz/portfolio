@@ -137,6 +137,23 @@ const renderShare = () => (
     </div>
 );
 
+const QUICK_COMMANDS = [
+    { label: 'Help', command: 'help' },
+    { label: 'Profile', command: 'whoami' },
+    { label: 'Skills', command: 'skills' },
+    { label: 'Projects', command: 'projects' },
+    { label: 'Contact', command: 'contact' },
+    { label: 'Preview', command: 'preview' },
+];
+
+const useHapticFeedback = () => {
+    return useCallback(() => {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+            navigator.vibrate(12);
+        }
+    }, []);
+};
+
 const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<HistoryItem[]>([
@@ -145,6 +162,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const [voiceSupported, setVoiceSupported] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [voiceTranscript, setVoiceTranscript] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -156,6 +174,8 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
         }
     }, []);
 
+    const triggerHaptics = useHapticFeedback();
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -164,6 +184,22 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     
     useEffect(() => {
         inputRef.current?.focus();
+    }, []);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        const computeMobile = (matches: boolean) => {
+            const touchCapable = 'ontouchstart' in window || (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0);
+            setIsMobile(touchCapable || matches);
+        };
+
+        computeMobile(mediaQuery.matches);
+        const handleMediaChange = (event: MediaQueryListEvent) => computeMobile(event.matches);
+        mediaQuery.addEventListener('change', handleMediaChange);
+
+        return () => mediaQuery.removeEventListener('change', handleMediaChange);
     }, []);
 
     const startVoiceCapture = useCallback(() => {
@@ -295,8 +331,9 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
 
     return (
         <div
-            className="p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-green-400 text-sm sm:text-base flex flex-col"
+            className="p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-green-400 text-sm sm:text-base flex flex-col pb-28 sm:pb-0"
             onClick={() => inputRef.current?.focus()}
+            style={{ paddingBottom: isMobile ? 'calc(7rem + env(safe-area-inset-bottom, 0px))' : undefined }}
         >
             <div ref={scrollRef} className="flex-grow overflow-y-auto pr-2">
                 {history.map(item => (
@@ -335,7 +372,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     </button>
                 </div>
                 {voiceTranscript && (
-                    <div className="flex items-center gap-2 bg-black/60 border border-emerald-500/30 px-3 py-2 rounded text-[11px] tracking-tight">
+                    <div className="flex items-center gap-2 bg-black/60 border border-emerald-500/30 px-3 py-2 rounded text-[11px] tracking-tight" aria-live="polite" role="status">
                         <span className="uppercase text-emerald-300 font-semibold">Captured</span>
                         <span className="text-white">“{voiceTranscript}”</span>
                     </div>
@@ -348,7 +385,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    className="flex-grow bg-transparent border-none text-white focus:outline-none ml-2"
+                    className="flex-grow bg-transparent border-none text-white focus:outline-none ml-2 text-base sm:text-inherit"
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
