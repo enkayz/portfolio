@@ -1,16 +1,27 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const ShareLinks: React.FC = () => {
     const [copyText, setCopyText] = useState('Copy Link');
     const [shareError, setShareError] = useState('');
-    const shareSupported = useMemo(() => typeof navigator !== 'undefined' && 'share' in navigator, []);
+    const [shareHref, setShareHref] = useState('');
+    const shareSupported = useMemo(
+        () => typeof navigator !== 'undefined' && 'share' in navigator,
+        []
+    );
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        setShareHref(window.location.href);
+    }, []);
 
     const handleCopy = () => {
+        if (!shareHref) return;
+
         // Fallback for http contexts
         if (!navigator.clipboard) {
             const textArea = document.createElement("textarea");
-            textArea.value = window.location.href;
+            textArea.value = shareHref;
             textArea.style.position = "fixed"; // Avoid scrolling to bottom
             document.body.appendChild(textArea);
             textArea.focus();
@@ -28,7 +39,7 @@ const ShareLinks: React.FC = () => {
         }
 
         // Modern clipboard API for https contexts
-        navigator.clipboard.writeText(window.location.href).then(() => {
+        navigator.clipboard.writeText(shareHref).then(() => {
             setCopyText('Copied!');
             setTimeout(() => setCopyText('Copy Link'), 2000);
         }).catch(err => {
@@ -38,17 +49,17 @@ const ShareLinks: React.FC = () => {
         });
     };
     
-    const shareUrl = encodeURIComponent(window.location.href);
+    const shareUrl = encodeURIComponent(shareHref || 'https://www.system8.com.au');
     const shareText = encodeURIComponent("Check out this interactive portfolio for a Senior DevOps & Systems Engineer:");
 
     const handleNativeShare = async () => {
-        if (!shareSupported) return;
+        if (!shareSupported || !shareHref) return;
         setShareError('');
         try {
             await navigator.share({
                 title: 'System 8 Interactive Portfolio',
                 text: 'Check out this interactive portfolio for a Senior DevOps & Systems Engineer:',
-                url: window.location.href,
+                url: shareHref,
             });
         } catch (error) {
             if ((error as Error).name !== 'AbortError') {
