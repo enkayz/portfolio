@@ -145,10 +145,26 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const [voiceSupported, setVoiceSupported] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [voiceTranscript, setVoiceTranscript] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
+
+    const triggerHaptics = useCallback(() => {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+            navigator.vibrate(12);
+        }
+    }, []);
+
+    const quickCommands = [
+        { label: 'Help', command: 'help' },
+        { label: 'Profile', command: 'whoami' },
+        { label: 'Skills', command: 'skills' },
+        { label: 'Projects', command: 'projects' },
+        { label: 'Contact', command: 'contact' },
+        { label: 'Preview', command: 'preview' },
+    ];
 
     const triggerHaptics = useCallback(() => {
         if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
@@ -295,8 +311,9 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
 
     return (
         <div
-            className="p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-green-400 text-sm sm:text-base flex flex-col"
+            className="p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-green-400 text-sm sm:text-base flex flex-col pb-28 sm:pb-0"
             onClick={() => inputRef.current?.focus()}
+            style={{ paddingBottom: isMobile ? 'calc(7rem + env(safe-area-inset-bottom, 0px))' : undefined }}
         >
             <div ref={scrollRef} className="flex-grow overflow-y-auto pr-2">
                 {history.map(item => (
@@ -341,14 +358,14 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
                     </div>
                 )}
             </div>
-            <form onSubmit={handleSubmit} className="flex items-center mt-2">
+            <form onSubmit={handleSubmit} className="flex items-center mt-2 bg-black/60 px-3 py-2 rounded-md border border-teal-700/30">
                 <span className="text-teal-400">system8@portfolio:~$</span>
                 <input
                     ref={inputRef}
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    className="flex-grow bg-transparent border-none text-white focus:outline-none ml-2"
+                    className="flex-grow bg-transparent border-none text-white focus:outline-none ml-2 text-base sm:text-inherit"
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
