@@ -33,7 +33,7 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
       <div className="flex-grow overflow-y-auto pr-4">
         <header className="text-center mb-6">
             <h1 className="text-3xl sm:text-4xl font-bold text-yellow-400">Dylan Boekelman</h1>
-            <p className="text-base sm:text-lg text-cyan-400">Systems & DevOps Engineer · Telephony & Audio-Visual Technologist</p>
+            <p className="text-base sm:text-lg text-cyan-400">Microsoft 365 Modern Work Consultant · Teams & Security Specialist</p>
         </header>
 
         <section id="profile">
