@@ -2,32 +2,32 @@
 import React from 'react';
 import { Experience } from './types';
 
-export const PROFILE_SUMMARY = "Senior systems/DevOps engineer and telephony specialist with 20+ years of full-stack delivery across hosting, cloud, and carrier-grade voice platforms. Strong record of designing, deploying and maintaining resilient infrastructure, IVR and SIP environments, and end-to-end business workflows. Equally comfortable hands-on in code, on the command line, or in front of clients and non-technical stakeholders.";
+export const PROFILE_SUMMARY = "Microsoft 365 modern work consultant with two decades of delivery across identity, collaboration, security, and automation. I help organisations (and the MSPs that support them) migrate, secure, and govern their tenants; modernise collaboration with Teams, SharePoint, and Exchange Online; and automate business processes with Power Platform and Graph/PowerShell. Equally comfortable running workshops with business leaders, building deployment scripts, or coaching administrators through adoption.";
 
 export const SKILLS = {
   devops: {
-    label: "DevOps & Software Engineering",
+    label: "Microsoft 365 Modern Work",
     items: [
-      "Linux (Debian/Ubuntu/CentOS), shell scripting (Bash/Zsh), system hardening, automation.",
-      "Full-stack web: LAMP, MERN/MEAN, REST APIs, portal and dashboard development.",
-      "Languages: PHP, Python, Java, C#/.NET, JavaScript/TypeScript.",
-      "Cloud & SaaS: AWS, Azure, GCP (POCs), Office 365, containerised and VM-based deployments.",
-      "Source control and collaboration: Git/GitHub, Jira/Confluence, CI-style workflows.",
+      "Microsoft 365 tenant design, hardening, and lifecycle management across Exchange Online, SharePoint, OneDrive, and Teams.",
+      "Modern collaboration rollouts: Teams voice and meeting rooms, SharePoint sites/intranets, Viva/Loop pilots, and adoption campaigns.",
+      "Identity and access: Entra ID (Azure AD), Conditional Access, MFA, PIM, and role-based delegation for MSP and customer tenants.",
+      "Endpoint and security: Intune for Windows/macOS/iOS, Defender suite, Purview compliance, and secure score remediation.",
+      "Automation: PowerShell/Graph automation, Power Platform (Power Automate/Apps), governance policies, and admin/runbook scripting.",
     ]
   },
   telephony: {
-    label: "Telephony, Networks & Audio-Visual",
+    label: "Cloud Voice, Infrastructure & Delivery",
     items: [
-      "Asterisk and SIP trunking, IVR design, MoH platforms, Broadsoft and Cisco integrations.",
-      "IP networking, OSI-layer troubleshooting, VPNs, QoS, fibre/copper network design.",
-      "CCTV and physical security: camera deployment, AI tripwires, networked recording solutions.",
-      "Studio and live sound: signal flow design, PA tuning, digital mixers, hybrid analog/digital rigs.",
-      "Training, documentation, and workflow design for technical and non-technical users.",
+      "Teams Phone and hybrid voice integrations, number porting, call flows/auto attendants, and SBC/SIP configurations.",
+      "Migration projects for MSP clients: tenant-to-tenant moves, Exchange/SharePoint/OneDrive data migration, and coexistence planning.",
+      "Network fundamentals for collaboration: QoS, VPN, and bandwidth/latency tuning for Microsoft cloud services.",
+      "Change management: executive briefings, admin upskilling, and user-focused enablement to drive adoption and reduce support load.",
+      "Engagement delivery: requirements discovery, statement of work creation, project governance, and post-cutover support with MSP partners.",
     ]
   },
   chips: [
-    "DevOps & Automation", "Asterisk / SIP", "LAMP / MERN", "Linux & Networking",
-    "Office 365 / Azure", "Telephony Product Dev", "CCTV & Security", "Audio & Live Sound"
+    "Microsoft 365", "Teams Phone", "SharePoint & OneDrive", "Entra ID / Intune",
+    "Power Platform", "Security & Compliance", "Automation & PowerShell", "MSP Delivery"
   ]
 };
 
@@ -35,65 +35,46 @@ export const EXPERIENCE: Experience[] = [
   {
     title: "Principal Consultant – System 8 / The AI Guy",
     meta: "Self-employed · 2021 – Present · Perth, WA",
-    org: "Independent consulting – AI automation, DevOps, telephony, and audio-visual systems",
+    org: "Modern work and automation consultancy for Microsoft-focused SMBs and MSP partners",
     duties: [
-      "Design and delivery of AI-assisted automation for small businesses (booking, notification, and CRM-style workflows).",
-      "Architecture and implementation of cloud-hosted and on-prem services, including Linux servers, containers, and VoIP stacks.",
-      "Studio and live-venue AV design: routing templates, digital mixer configurations, and hybrid analog/digital integration.",
+      "Plan and execute Microsoft 365 modernisation programs: identity hardening, Teams/SharePoint rollouts, and secure collaboration baselines.",
+      "Deliver Teams Phone and hybrid voice projects, including call routing, number porting, SBC/SIP integration, and admin training.",
+      "Build PowerShell/Graph runbooks and Power Automate workflows to standardise provisioning, governance, and client onboarding for MSPs.",
     ],
   },
   {
-    title: "Technical Director & Audio Systems Engineer",
-    meta: "Elemental Sound / Elemental Music Club · 2023 – Present · O'Connor, WA",
-    org: "Rehearsal studios, small venue and community music space",
+    title: "Modern Work Consultant (MSP Engagements)",
+    meta: "Multiple MSPs · 2019 – Present · Remote & Perth, WA",
     duties: [
-      "End-to-end design and commissioning of multi-room rehearsal and performance audio systems.",
-      "Development of repeatable setup and shutdown procedures, documentation, and laminated checklists.",
-      "Hands-on live sound duties for community music nights and events; mentoring musicians and staff.",
-    ],
-  },
-  {
-    title: "CCTV & Network Installer (Consultant)",
-    meta: "Five Star Security & Electrical · 2020 – 2021 · Perth, WA",
-    duties: [
-        "CCTV camera installation, configuration and commissioning, including AI tripwire setup.",
-        "Network and data cabling to support CCTV and related infrastructure.",
-        "Office 365 migration support and general small-business IT assistance.",
+        "Partner with MSP teams to scope, price, and deliver Microsoft 365 projects: tenant builds, Intune baselines, and secure score remediation.",
+        "Lead migrations from on-prem Exchange/file servers and legacy cloud to Exchange Online, SharePoint/OneDrive, and Teams with minimal downtime.",
+        "Coach MSP engineers through deployment patterns, incident response, and adoption playbooks inspired by Microsoft MVP community leaders like Robert Crane.",
     ]
   },
   {
-    title: "Telephony Engineer",
+    title: "Telephony & Teams Voice Engineer",
     meta: "HostTel · 2019 – 2020 (Full-time); 2009 – 2018 (Ad-hoc) · Perth, WA",
     duties: [
-        "Development of Asterisk-based cloud telephony platform to deliver SIP trunks for business clients.",
-        "Refactoring and stabilising interdependent service scripts through reverse engineering of legacy codebases.",
-        "Support for production voice systems, troubleshooting call quality and routing issues across multiple carriers.",
+        "Evolved SIP and Asterisk delivery patterns into Teams Phone-aligned call flows, including auto attendants and direct routing readiness.",
+        "Reverse engineered and stabilised legacy voice automation scripts, replacing them with modern PowerShell and API-based orchestration.",
+        "Supported production voice systems for MSP clients, troubleshooting routing, carrier, and QoS issues impacting Microsoft 365 services.",
     ]
   },
   {
     title: "Senior Software Engineer",
     meta: "Rackcorp · 2018 – 2020 (Full-time); 2013 – 2017 (Ad-hoc)",
     duties: [
-        "LAMP-stack development for customer self-service portals on a global hosting platform.",
-        "Platform development for Big Data as a Service offerings, including ingestion, storage and analytics pipelines.",
-        "Collaboration with infrastructure teams on performance tuning and monitoring for high-uptime environments.",
-    ]
-  },
-  {
-    title: "Product Development Manager",
-    meta: "Captivate Global (Online On Hold) · 2009 – 2012",
-    duties: [
-        "DevOps and product ownership for music-on-hold and telephony content-delivery platforms.",
-        "Development of embedded devices to deliver MoH to IP telephony systems (Cisco, Avaya and others).",
-        "Liaison between engineering, sales and customers to shape product roadmaps and deployments.",
+        "Built and maintained customer portals and automation APIs, later leveraged to streamline Microsoft 365 provisioning workflows.",
+        "Collaborated with infrastructure teams on high-availability hosting used for hybrid Exchange/SharePoint and Teams direct routing components.",
+        "Introduced source control and release practices that translated into reliable runbooks for MSP-led modern work rollouts.",
     ]
   },
 ];
 
 export const PROJECTS = [
-    "AI-assisted telephony and booking workflows – Designed and prototyped pipelines combining VoIP, speech technologies and cloud services to automate inbound calls, reminders and simple customer interactions.",
-    "Multi-room rehearsal studio build – Planned and implemented audio routing, monitoring and patching for a multi-room rehearsal and small-venue space, including standardised configuration templates and maintenance procedures.",
-    "Big Data as a Service platform components – Contributed to design and implementation of data ingestion and analytics layers for hosting-provider big data services."
+    "Tenant modernisation accelerator – Built reusable PowerShell/Graph modules to harden Entra ID, configure Conditional Access, and standardise Teams/SharePoint governance across MSP client tenants.",
+    "Teams Phone and meeting rooms uplift – Delivered direct routing, call queues/auto attendants, device policies, and user training for SMB customers moving from legacy PBXs.",
+    "Migration factory for MSPs – Defined repeatable Exchange/SharePoint/OneDrive migration runbooks with pre-flight checks, delta syncs, and end-user communication packs."
 ];
 
 export const CONTACT = {
@@ -105,8 +86,8 @@ export const CONTACT = {
 };
 
 export const ADDITIONAL_INFO = [
-    "Active open-source contributor with a long-running GitHub history under @enkayz.",
-    "Experienced musician (keys/percussion) and live sound operator.",
-    "Comfortable mentoring junior staff and end users; extensive history of training delivery and documentation.",
-    "References available on request.",
+    "Active contributor to Microsoft 365 community discussions and workshops, including collaborations and knowledge sharing with MVPs such as Robert Crane.",
+    "Comfortable mentoring admins, service desk teams, and business champions through modern work adoption and governance.",
+    "PowerShell-first approach to repeatable delivery; open-source and private modules available for MSP deployment factories.",
+    "References and detailed engagement summaries available on request.",
 ];
