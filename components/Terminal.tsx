@@ -1,5 +1,7 @@
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { gsap } from 'gsap';
 import { HistoryItem } from '../types';
 import { PROFILE_SUMMARY, SKILLS, EXPERIENCE, PROJECTS, CONTACT, ADDITIONAL_INFO } from '../constants';
 import { Experience } from '../types';
@@ -148,6 +150,7 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const shellRef = useRef<HTMLDivElement>(null);
     const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
 
     const triggerHaptics = useCallback(() => {
@@ -161,9 +164,31 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [history]);
-    
+
     useEffect(() => {
         inputRef.current?.focus();
+    }, []);
+
+    useLayoutEffect(() => {
+        if (!shellRef.current) return undefined;
+        const ctx = gsap.context(() => {
+            gsap.to('.scan-line', {
+                yPercent: 120,
+                repeat: -1,
+                duration: 3.2,
+                ease: 'none',
+            });
+
+            gsap.to('.pulse-glow', {
+                opacity: 0.85,
+                repeat: -1,
+                yoyo: true,
+                duration: 2,
+                ease: 'sine.inOut',
+            });
+        }, shellRef);
+
+        return () => ctx.revert();
     }, []);
 
     const startVoiceCapture = useCallback(() => {
@@ -295,103 +320,151 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
 
     return (
         <div
-            className="p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-green-400 text-sm sm:text-base flex flex-col"
+            ref={shellRef}
+            className="relative p-4 h-full min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-4rem)] font-mono text-emerald-100 text-sm sm:text-base flex flex-col"
             onClick={() => inputRef.current?.focus()}
         >
-            <div ref={scrollRef} className="flex-grow overflow-y-auto pr-2">
-                {history.map(item => (
-                    <div key={item.id} className="mb-2">
-                        {item.command && (
-                            <div className="flex items-center">
-                                <span className="text-teal-400">system8@portfolio:~$</span>
-                                <span className="ml-2 text-white">{item.command}</span>
-                            </div>
-                        )}
-                        <div className="text-white">{item.output}</div>
-                    </div>
-                ))}
-            </div>
-            <div className="flex items-center flex-wrap gap-3 mt-3 text-xs text-gray-300">
-                <div className="flex items-center gap-2 bg-teal-900/50 border border-teal-600/40 px-3 py-2 rounded">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <div>
-                        <p className="text-cyan-300 font-semibold uppercase">Neural Uplink</p>
-                        <p className="text-gray-400">Latency stabilized with adaptive beamforming.</p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 bg-slate-900/70 border border-cyan-600/40 px-3 py-2 rounded">
-                    <span className={`h-2 w-2 rounded-full ${voiceSupported ? (isListening ? 'bg-green-400 animate-ping' : 'bg-cyan-300') : 'bg-gray-500'}`} />
-                    <div>
-                        <p className="text-cyan-300 font-semibold uppercase">Voice Link</p>
-                        <p className="text-gray-400">{voiceSupported ? (isListening ? 'Capturing command...' : 'Ready for activation.') : 'Unavailable in this environment.'}</p>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={isListening ? stopVoiceCapture : startVoiceCapture}
-                        disabled={!voiceSupported}
-                        className="ml-2 bg-teal-800 text-white px-3 py-1 rounded border border-teal-500/50 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                    >
-                        {isListening ? 'Stop Listening' : 'Voice Command'}
-                    </button>
-                </div>
-                {voiceTranscript && (
-                    <div className="flex items-center gap-2 bg-black/60 border border-emerald-500/30 px-3 py-2 rounded text-[11px] tracking-tight">
-                        <span className="uppercase text-emerald-300 font-semibold">Captured</span>
-                        <span className="text-white">“{voiceTranscript}”</span>
-                    </div>
-                )}
-            </div>
-            <form onSubmit={handleSubmit} className="flex items-center mt-2">
-                <span className="text-teal-400">system8@portfolio:~$</span>
-                <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    className="flex-grow bg-transparent border-none text-white focus:outline-none ml-2"
-                    autoComplete="off"
-                    autoCapitalize="off"
-                    autoCorrect="off"
-                    inputMode="text"
-                    enterKeyHint="go"
-                />
-                 <div className="inline-block h-4 w-2 bg-green-400 cursor-blink" />
-            </form>
+            <div className="absolute inset-0 pointer-events-none opacity-25 bg-[radial-gradient(circle_at_20%_20%,rgba(52,211,153,0.3),transparent_40%),radial-gradient(circle_at_80%_10%,rgba(56,189,248,0.35),transparent_30%)]" />
+            <div className="absolute inset-0 scan-line bg-gradient-to-b from-transparent via-emerald-400/10 to-transparent" />
+            <div className="absolute inset-0 pulse-glow" />
 
-            <div
-                className="md:hidden sticky bottom-0 left-0 right-0 -mx-4 mt-4 px-4 pb-4 pt-3 bg-black/70 backdrop-blur-lg border-t border-emerald-800/40"
-                style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}
+            <motion.div
+                initial={{ opacity: 0, y: -16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+                className="relative mb-4 rounded-xl border border-emerald-600/50 bg-black/60 px-4 py-3 flex flex-wrap items-center justify-between gap-3 shadow-[0_0_40px_rgba(16,185,129,0.18)]"
             >
-                <div className="flex items-center justify-between mb-2">
-                    <p className="text-[11px] uppercase tracking-[0.12em] text-emerald-200">Quick controls</p>
-                    <span className="text-[10px] text-gray-400">Tap to run a command</span>
+                <div>
+                    <p className="text-[11px] uppercase tracking-[0.24em] text-emerald-200">Neon Terminal</p>
+                    <p className="text-lg font-semibold text-white">system8@portfolio:~$ shell engaged</p>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                    {quickCommands.map((command) => (
-                        <button
-                            key={command}
-                            type="button"
-                            onClick={() => handleQuickAction(command)}
-                            className="px-3 py-2 text-xs rounded-lg bg-emerald-900/80 border border-emerald-700/60 text-white active:scale-95 transition-transform"
+                <div className="flex items-center gap-3 text-xs text-emerald-200">
+                    <div className="flex items-center gap-2 bg-emerald-900/50 border border-emerald-500/40 rounded-lg px-3 py-2">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Link stable</span>
+                    </div>
+                    <motion.button
+                        whileTap={{ scale: 0.96 }}
+                        onClick={onExit}
+                        className="rounded-lg border border-emerald-500/40 bg-emerald-900/40 px-3 py-2 text-emerald-100 hover:bg-emerald-800/60 transition"
+                        type="button"
+                    >
+                        Exit HUD
+                    </motion.button>
+                </div>
+            </motion.div>
+
+            <div ref={scrollRef} className="relative flex-grow overflow-y-auto pr-2 space-y-2">
+                <AnimatePresence>
+                    {history.map(item => (
+                        <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2, ease: 'easeOut' }}
+                            className="rounded-lg border border-emerald-500/20 bg-black/50 p-2"
                         >
-                            {command}
-                        </button>
+                            {item.command && (
+                                <div className="flex items-center text-emerald-200 mb-1">
+                                    <span className="text-emerald-400">system8@portfolio:~$</span>
+                                    <span className="ml-2 text-white">{item.command}</span>
+                                </div>
+                            )}
+                            <div className="text-white leading-relaxed">{item.output}</div>
+                        </motion.div>
                     ))}
-                    <button
-                        type="button"
-                        onClick={() => handleQuickAction('listen')}
-                        disabled={!voiceSupported}
-                        className="px-3 py-2 text-xs rounded-lg bg-cyan-900/80 border border-cyan-700/60 text-white active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {isListening ? 'Stop mic' : 'Voice' }
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => handleQuickAction('clear')}
-                        className="px-3 py-2 text-xs rounded-lg bg-slate-900/80 border border-slate-700/60 text-white active:scale-95 transition-transform"
-                    >
-                        clear
-                    </button>
+                </AnimatePresence>
+            </div>
+
+            <div className="relative flex flex-col gap-3 mt-3 text-xs text-gray-300">
+                <div className="flex flex-wrap gap-3">
+                    <div className="flex items-center gap-2 bg-emerald-900/50 border border-emerald-600/40 px-3 py-2 rounded">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <div>
+                            <p className="text-emerald-200 font-semibold uppercase tracking-[0.08em]">Neural Uplink</p>
+                            <p className="text-gray-400">Latency stabilized with adaptive beamforming.</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-slate-900/70 border border-cyan-600/40 px-3 py-2 rounded">
+                        <span className={`h-2 w-2 rounded-full ${voiceSupported ? (isListening ? 'bg-green-400 animate-ping' : 'bg-cyan-300') : 'bg-gray-500'}`} />
+                        <div>
+                            <p className="text-cyan-300 font-semibold uppercase tracking-[0.08em]">Voice Link</p>
+                            <p className="text-gray-400">{voiceSupported ? (isListening ? 'Capturing command...' : 'Ready for activation.') : 'Unavailable in this environment.'}</p>
+                        </div>
+                        <motion.button
+                            type="button"
+                            whileTap={{ scale: 0.96 }}
+                            onClick={isListening ? stopVoiceCapture : startVoiceCapture}
+                            disabled={!voiceSupported}
+                            className="ml-2 bg-emerald-800 text-white px-3 py-1 rounded border border-emerald-500/50 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            {isListening ? 'Stop Listening' : 'Voice Command'}
+                        </motion.button>
+                    </div>
+                    {voiceTranscript && (
+                        <div className="flex items-center gap-2 bg-black/60 border border-emerald-500/30 px-3 py-2 rounded text-[11px] tracking-tight">
+                            <span className="uppercase text-emerald-300 font-semibold">Captured</span>
+                            <span className="text-white">“{voiceTranscript}”</span>
+                        </div>
+                    )}
+                </div>
+
+                <form onSubmit={handleSubmit} className="relative flex items-center rounded-lg border border-emerald-600/40 bg-black/60 px-3 py-2">
+                    <span className="text-emerald-300">system8@portfolio:~$</span>
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        className="flex-grow bg-transparent border-none text-white focus:outline-none ml-2"
+                        autoComplete="off"
+                        autoCapitalize="off"
+                        autoCorrect="off"
+                        inputMode="text"
+                        enterKeyHint="go"
+                    />
+                    <div className="inline-block h-4 w-2 bg-emerald-300 cursor-blink" />
+                </form>
+
+                <div
+                    className="sticky md:static bottom-0 left-0 right-0 -mx-4 md:mx-0 px-4 md:px-0 pb-4 md:pb-0 pt-3 bg-black/70 md:bg-transparent backdrop-blur-lg md:backdrop-blur-none border-t border-emerald-800/40 md:border-0"
+                    style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)' }}
+                >
+                    <div className="flex items-center justify-between mb-2">
+                        <p className="text-[11px] uppercase tracking-[0.12em] text-emerald-200">Quick controls</p>
+                        <span className="text-[10px] text-gray-400">Tap to run a command</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {quickCommands.map((command) => (
+                            <motion.button
+                                key={command}
+                                type="button"
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => handleQuickAction(command)}
+                                className="px-3 py-2 text-xs rounded-lg bg-emerald-900/80 border border-emerald-700/60 text-white active:scale-95 transition-transform shadow-[0_0_12px_rgba(52,211,153,0.15)]"
+                            >
+                                {command}
+                            </motion.button>
+                        ))}
+                        <motion.button
+                            type="button"
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleQuickAction('listen')}
+                            disabled={!voiceSupported}
+                            className="px-3 py-2 text-xs rounded-lg bg-cyan-900/80 border border-cyan-700/60 text-white active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isListening ? 'Stop mic' : 'Voice' }
+                        </motion.button>
+                        <motion.button
+                            type="button"
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleQuickAction('clear')}
+                            className="px-3 py-2 text-xs rounded-lg bg-slate-900/80 border border-slate-700/60 text-white active:scale-95 transition-transform"
+                        >
+                            clear
+                        </motion.button>
+                    </div>
                 </div>
             </div>
         </div>

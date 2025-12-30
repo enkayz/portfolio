@@ -1,4 +1,5 @@
 import React, { Suspense, useCallback, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import BootSequence from './components/BootSequence';
 import HudDisplay from './components/HudDisplay';
 import DynamicBackground from './components/DynamicBackground';
@@ -33,14 +34,45 @@ const App: React.FC = () => {
       }}
     >
       <DynamicBackground />
+      <div className="pointer-events-none absolute inset-6 rounded-[32px] border border-emerald-500/30" />
       <div className="relative z-10 max-w-6xl mx-auto p-4 sm:p-8">
-        {view === 'boot' && <BootSequence onComplete={handleBootComplete} />}
-        {view === 'hud' && <HudDisplay onEnterShell={handleEnterShell} />}
-        {view === 'terminal' && (
-          <Suspense fallback={<div className="text-gray-400">Loading shell…</div>}>
-            <Terminal onExit={handleExitShell} onTogglePreview={handleTogglePreview} />
-          </Suspense>
-        )}
+        <AnimatePresence mode="wait">
+          {view === 'boot' && (
+            <motion.div
+              key="boot"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+            >
+              <BootSequence onComplete={handleBootComplete} />
+            </motion.div>
+          )}
+          {view === 'hud' && (
+            <motion.div
+              key="hud"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <HudDisplay onEnterShell={handleEnterShell} />
+            </motion.div>
+          )}
+          {view === 'terminal' && (
+            <motion.div
+              key="terminal"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -18 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <Suspense fallback={<div className="text-gray-400">Loading shell…</div>}>
+                <Terminal onExit={handleExitShell} onTogglePreview={handleTogglePreview} />
+              </Suspense>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {showPreview && (
