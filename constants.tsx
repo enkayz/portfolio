@@ -34,7 +34,7 @@ export const SKILLS = {
 export const EXPERIENCE: Experience[] = [
   {
     title: "Principal Consultant – System 8 / The AI Guy",
-    meta: "Self-employed · 2021 – Present · Perth, WA",
+    meta: "Self-employed · 2021 – Present (updated 2026) · Perth, WA",
     org: "Independent consulting – AI automation, DevOps, telephony, and audio-visual systems",
     duties: [
       "Design and delivery of AI-assisted automation for small businesses (booking, notification, and CRM-style workflows).",
@@ -44,12 +44,13 @@ export const EXPERIENCE: Experience[] = [
   },
   {
     title: "Technical Director & Audio Systems Engineer",
-    meta: "Elemental Sound / Elemental Music Club · 2023 – Present · O'Connor, WA",
+    meta: "Elemental Sound / Elemental Music Club · 2023 – Present (updated 2026) · O'Connor, WA",
     org: "Rehearsal studios, small venue and community music space",
     duties: [
       "End-to-end design and commissioning of multi-room rehearsal and performance audio systems.",
       "Development of repeatable setup and shutdown procedures, documentation, and laminated checklists.",
       "Hands-on live sound duties for community music nights and events; mentoring musicians and staff.",
+      "2026 program development for community music events, including stage plots, band changeover standards, and front-of-house workflows.",
     ],
   },
   {
@@ -93,7 +94,8 @@ export const EXPERIENCE: Experience[] = [
 export const PROJECTS = [
     "AI-assisted telephony and booking workflows – Designed and prototyped pipelines combining VoIP, speech technologies and cloud services to automate inbound calls, reminders and simple customer interactions.",
     "Multi-room rehearsal studio build – Planned and implemented audio routing, monitoring and patching for a multi-room rehearsal and small-venue space, including standardised configuration templates and maintenance procedures.",
-    "Big Data as a Service platform components – Contributed to design and implementation of data ingestion and analytics layers for hosting-provider big data services."
+    "Big Data as a Service platform components – Contributed to design and implementation of data ingestion and analytics layers for hosting-provider big data services.",
+    "Community music operations (2026) – Expanded live-event production workflows covering rehearsal-room to stage transitions, volunteer onboarding, and musician-friendly technical documentation.",
 ];
 
 export const CONTACT = {
@@ -107,6 +109,7 @@ export const CONTACT = {
 export const ADDITIONAL_INFO = [
     "Active open-source contributor with a long-running GitHub history under @enkayz.",
     "Experienced musician (keys/percussion) and live sound operator.",
+    "Active in 2026 community music programming, artist support, and live technical production planning.",
     "Comfortable mentoring junior staff and end users; extensive history of training delivery and documentation.",
     "References available on request.",
 ];
