@@ -39,7 +39,7 @@ const ShareLinks: React.FC = () => {
     };
     
     const shareUrl = encodeURIComponent(window.location.href);
-    const shareText = encodeURIComponent("Check out this interactive portfolio for a Senior DevOps & Systems Engineer:");
+    const shareText = encodeURIComponent("Legacy Microsoft systems, SharePoint recovery and integration portfolio:");
 
     const handleNativeShare = async () => {
         if (!shareSupported) return;
@@ -47,7 +47,7 @@ const ShareLinks: React.FC = () => {
         try {
             await navigator.share({
                 title: 'System 8 Interactive Portfolio',
-                text: 'Check out this interactive portfolio for a Senior DevOps & Systems Engineer:',
+                text: 'Legacy Microsoft systems, SharePoint recovery and integration portfolio:',
                 url: window.location.href,
             });
         } catch (error) {

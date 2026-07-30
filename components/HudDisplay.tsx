@@ -1,6 +1,16 @@
 
 import React, { useEffect } from 'react';
-import { PROFILE_SUMMARY, SKILLS, EXPERIENCE, PROJECTS, CONTACT, ADDITIONAL_INFO } from '../constants';
+import {
+  PROFILE_SUMMARY,
+  CURRENT_FOCUS,
+  SKILLS,
+  DELIVERY_METHOD,
+  QUALIFICATIONS,
+  EXPERIENCE,
+  PROJECTS,
+  TECHNICAL_REFERENCES,
+  CONTACT,
+} from '../constants';
 import { Experience } from '../types';
 import ShareLinks from './ShareLinks';
 
@@ -33,12 +43,24 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
       <div className="flex-grow overflow-y-auto pr-4">
         <header className="text-center mb-6">
             <h1 className="text-3xl sm:text-4xl font-bold text-yellow-400">Dylan Boekelman</h1>
-            <p className="text-base sm:text-lg text-cyan-400">Systems & DevOps Engineer · Telephony & Audio-Visual Technologist</p>
+            <p className="text-base sm:text-lg text-cyan-400">Legacy Microsoft Systems & Integration Engineer</p>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1">SharePoint recovery · Microsoft 365 · identity · middleware · technical discovery</p>
         </header>
 
         <section id="profile">
           <SectionTitle>Profile</SectionTitle>
           <p className="text-gray-300 leading-relaxed">{PROFILE_SUMMARY}</p>
+        </section>
+
+        <section id="current-focus">
+          <SectionTitle>Current Contract Focus</SectionTitle>
+          <div className="border border-cyan-500/40 bg-cyan-950/20 rounded-lg p-4">
+            <h3 className="font-bold text-yellow-400 text-base">{CURRENT_FOCUS.title}</h3>
+            <p className="text-gray-300 leading-relaxed mt-2">{CURRENT_FOCUS.summary}</p>
+            <ul className="list-disc list-outside ml-5 text-gray-300 mt-3 space-y-1">
+              {CURRENT_FOCUS.items.map((item, i) => <li key={i}>{item}</li>)}
+            </ul>
+          </div>
         </section>
 
         <section id="contact">
@@ -56,15 +78,15 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
           <SectionTitle>Core Skills</SectionTitle>
            <div className="grid md:grid-cols-2 gap-x-8">
             <div>
-                <p className="font-bold text-yellow-400">{SKILLS.devops.label}</p>
-                <ul className="list-disc list-inside text-gray-300 mt-1">
-                    {SKILLS.devops.items.map((item, i) => <li key={i}>{item}</li>)}
+                <p className="font-bold text-yellow-400">{SKILLS.microsoft.label}</p>
+                <ul className="list-disc list-outside ml-5 text-gray-300 mt-1 space-y-1">
+                    {SKILLS.microsoft.items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
             </div>
             <div className="mt-4 md:mt-0">
-                <p className="font-bold text-yellow-400">{SKILLS.telephony.label}</p>
-                <ul className="list-disc list-inside text-gray-300 mt-1">
-                    {SKILLS.telephony.items.map((item, i) => <li key={i}>{item}</li>)}
+                <p className="font-bold text-yellow-400">{SKILLS.integration.label}</p>
+                <ul className="list-disc list-outside ml-5 text-gray-300 mt-1 space-y-1">
+                    {SKILLS.integration.items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
             </div>
         </div>
@@ -73,6 +95,30 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
                 <span key={i} className="bg-teal-800 text-teal-200 text-xs font-semibold px-3 py-1 rounded-full">{chip}</span>
             ))}
         </div>
+        </section>
+
+        <section id="method">
+          <SectionTitle>Evidence-Led Delivery Method</SectionTitle>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {DELIVERY_METHOD.map((step) => (
+              <div key={step.label} className="border border-teal-500/30 bg-black/30 rounded-lg p-3">
+                <p className="font-bold text-yellow-400">{step.label}</p>
+                <p className="text-sm text-gray-300 mt-1">{step.detail}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="qualifications">
+          <SectionTitle>Qualifications & Technical Standing</SectionTitle>
+          <div className="space-y-3">
+            {QUALIFICATIONS.map((qualification) => (
+              <div key={qualification.title}>
+                <h3 className="text-yellow-400 font-bold">{qualification.title}</h3>
+                <p className="text-gray-300">{qualification.detail}</p>
+              </div>
+            ))}
+          </div>
         </section>
         
         <section id="experience">
@@ -86,7 +132,7 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
                     </div>
                     {job.org && <p className="text-sm text-gray-400">{job.org}</p>}
                     {job.duties && (
-                        <ul className="list-disc list-inside text-gray-300 mt-1">
+                        <ul className="list-disc list-outside ml-5 text-gray-300 mt-1">
                             {job.duties.map((duty, j) => <li key={j}>{duty}</li>)}
                         </ul>
                     )}
@@ -97,9 +143,25 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
 
         <section id="projects">
           <SectionTitle>Selected Projects</SectionTitle>
-           <ul className="list-disc list-inside text-gray-300 space-y-2">
+           <ul className="list-disc list-outside ml-5 text-gray-300 space-y-2">
             {PROJECTS.map((project, i) => <li key={i}>{project}</li>)}
         </ul>
+        </section>
+
+        <section id="technical-basis">
+          <SectionTitle>Technical Basis</SectionTitle>
+          <p className="text-gray-300 leading-relaxed">
+            SharePoint 2013 is out of support, but that fact alone does not identify the fastest safe transition. Microsoft documents TLS 1.2 enablement for SharePoint 2013 and supports publishing on-premises SharePoint through Entra Application Proxy with appropriate authentication design. Any continuity option must still address backend supportability, patch state, identity, records, data security and a defined exit path. In 2026, an on-premises upgrade assessment must target SharePoint Server Subscription Edition rather than stop at the now out-of-support 2016 or 2019 releases.
+          </p>
+          <ul className="list-disc list-outside ml-5 text-gray-300 mt-2 space-y-1">
+            {TECHNICAL_REFERENCES.map((reference) => (
+              <li key={reference.url}>
+                <a href={reference.url} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
+                  {reference.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section id="share">

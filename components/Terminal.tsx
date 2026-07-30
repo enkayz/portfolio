@@ -1,7 +1,18 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { HistoryItem } from '../types';
-import { PROFILE_SUMMARY, SKILLS, EXPERIENCE, PROJECTS, CONTACT, ADDITIONAL_INFO } from '../constants';
+import {
+    PROFILE_SUMMARY,
+    CURRENT_FOCUS,
+    SKILLS,
+    DELIVERY_METHOD,
+    QUALIFICATIONS,
+    EXPERIENCE,
+    PROJECTS,
+    TECHNICAL_REFERENCES,
+    CONTACT,
+    ADDITIONAL_INFO,
+} from '../constants';
 import { Experience } from '../types';
 import ShareLinks from './ShareLinks';
 
@@ -9,6 +20,28 @@ interface TerminalProps {
     onExit: () => void;
     onTogglePreview: () => void;
 }
+
+interface BrowserSpeechRecognitionResult {
+    readonly 0: { transcript: string };
+    readonly isFinal: boolean;
+}
+
+interface BrowserSpeechRecognitionEvent extends Event {
+    readonly results: ArrayLike<BrowserSpeechRecognitionResult>;
+}
+
+interface BrowserSpeechRecognition {
+    lang: string;
+    continuous: boolean;
+    interimResults: boolean;
+    onresult: ((event: BrowserSpeechRecognitionEvent) => void) | null;
+    onend: (() => void) | null;
+    onerror: (() => void) | null;
+    start: () => void;
+    stop: () => void;
+}
+
+type BrowserSpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <h2 className="text-cyan-400 uppercase tracking-widest text-lg my-2 font-bold">{children}</h2>
@@ -19,9 +52,13 @@ const renderHelp = () => (
         <p className="text-yellow-400">Available commands:</p>
         <ul className="list-disc list-inside mt-2 space-y-1">
             <li><span className="text-green-400 font-bold">whoami</span> - Display profile summary.</li>
+            <li><span className="text-green-400 font-bold">focus</span> - Show current SharePoint/Microsoft contract focus.</li>
             <li><span className="text-green-400 font-bold">skills</span> - List core skills and technologies.</li>
+            <li><span className="text-green-400 font-bold">method</span> - Show the evidence-led delivery method.</li>
+            <li><span className="text-green-400 font-bold">credentials</span> - Show qualifications and technical standing.</li>
             <li><span className="text-green-400 font-bold">experience</span> - Show recent work experience.</li>
             <li><span className="text-green-400 font-bold">projects</span> - Display selected projects.</li>
+            <li><span className="text-green-400 font-bold">references</span> - Show the Microsoft technical basis.</li>
             <li><span className="text-green-400 font-bold">contact</span> - Show contact information.</li>
             <li><span className="text-green-400 font-bold">more</span> - Additional information.</li>
             <li><span className="text-green-400 font-bold">all</span> - Display all sections.</li>
@@ -41,26 +78,65 @@ const renderWhoami = () => (
     </div>
 );
 
+const renderFocus = () => (
+    <div>
+        <SectionTitle>Current Contract Focus</SectionTitle>
+        <p className="text-yellow-400 font-bold">{CURRENT_FOCUS.title}</p>
+        <p className="text-gray-300 leading-relaxed mt-1">{CURRENT_FOCUS.summary}</p>
+        <ul className="list-disc list-outside ml-5 text-gray-300 mt-2 space-y-1">
+            {CURRENT_FOCUS.items.map((item, i) => <li key={i}>{item}</li>)}
+        </ul>
+    </div>
+);
+
 const renderSkills = () => (
     <div>
         <SectionTitle>Core Skills</SectionTitle>
         <div className="grid md:grid-cols-2 gap-x-8">
             <div>
-                <p className="font-bold text-yellow-400">{SKILLS.devops.label}</p>
-                <ul className="list-disc list-inside text-gray-300 mt-1">
-                    {SKILLS.devops.items.map((item, i) => <li key={i}>{item}</li>)}
+                <p className="font-bold text-yellow-400">{SKILLS.microsoft.label}</p>
+                <ul className="list-disc list-outside ml-5 text-gray-300 mt-1">
+                    {SKILLS.microsoft.items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
             </div>
             <div className="mt-4 md:mt-0">
-                <p className="font-bold text-yellow-400">{SKILLS.telephony.label}</p>
-                <ul className="list-disc list-inside text-gray-300 mt-1">
-                    {SKILLS.telephony.items.map((item, i) => <li key={i}>{item}</li>)}
+                <p className="font-bold text-yellow-400">{SKILLS.integration.label}</p>
+                <ul className="list-disc list-outside ml-5 text-gray-300 mt-1">
+                    {SKILLS.integration.items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
             </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-4">
             {SKILLS.chips.map((chip, i) => (
                 <span key={i} className="bg-teal-800 text-teal-200 text-xs font-semibold px-3 py-1 rounded-full">{chip}</span>
+            ))}
+        </div>
+    </div>
+);
+
+const renderMethod = () => (
+    <div>
+        <SectionTitle>Evidence-Led Delivery Method</SectionTitle>
+        <div className="grid sm:grid-cols-2 gap-3">
+            {DELIVERY_METHOD.map((step) => (
+                <div key={step.label} className="border border-teal-500/30 rounded p-3">
+                    <p className="text-yellow-400 font-bold">{step.label}</p>
+                    <p className="text-gray-300 text-sm mt-1">{step.detail}</p>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
+const renderCredentials = () => (
+    <div>
+        <SectionTitle>Qualifications & Technical Standing</SectionTitle>
+        <div className="space-y-3">
+            {QUALIFICATIONS.map((qualification) => (
+                <div key={qualification.title}>
+                    <p className="text-yellow-400 font-bold">{qualification.title}</p>
+                    <p className="text-gray-300">{qualification.detail}</p>
+                </div>
             ))}
         </div>
     </div>
@@ -78,7 +154,7 @@ const renderExperience = () => (
                     </div>
                     {job.org && <p className="text-sm text-gray-400">{job.org}</p>}
                     {job.duties && (
-                        <ul className="list-disc list-inside text-gray-300 mt-1">
+                        <ul className="list-disc list-outside ml-5 text-gray-300 mt-1">
                             {job.duties.map((duty, j) => <li key={j}>{duty}</li>)}
                         </ul>
                     )}
@@ -91,8 +167,26 @@ const renderExperience = () => (
 const renderProjects = () => (
     <div>
         <SectionTitle>Selected Projects</SectionTitle>
-        <ul className="list-disc list-inside text-gray-300 space-y-2">
+        <ul className="list-disc list-outside ml-5 text-gray-300 space-y-2">
             {PROJECTS.map((project, i) => <li key={i}>{project}</li>)}
+        </ul>
+    </div>
+);
+
+const renderReferences = () => (
+    <div>
+        <SectionTitle>Technical Basis</SectionTitle>
+        <p className="text-gray-300 leading-relaxed">
+            SharePoint 2013 is out of support, but Microsoft documents TLS 1.2 enablement and controlled publication of on-premises SharePoint through Entra Application Proxy. A continuity option still requires a supportability, identity, data-security, records and exit-path decision. Any on-premises upgrade path should now target SharePoint Server Subscription Edition, not stop at the out-of-support 2016 or 2019 releases.
+        </p>
+        <ul className="list-disc list-outside ml-5 text-gray-300 mt-2">
+            {TECHNICAL_REFERENCES.map((reference) => (
+                <li key={reference.url}>
+                    <a href={reference.url} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
+                        {reference.label}
+                    </a>
+                </li>
+            ))}
         </ul>
     </div>
 );
@@ -122,9 +216,13 @@ const renderContact = () => (
 const renderAll = () => (
     <>
         {renderWhoami()}
+        {renderFocus()}
         {renderSkills()}
+        {renderMethod()}
+        {renderCredentials()}
         {renderExperience()}
         {renderProjects()}
+        {renderReferences()}
         {renderMore()}
         {renderContact()}
     </>
@@ -145,10 +243,10 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     const [voiceSupported, setVoiceSupported] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [voiceTranscript, setVoiceTranscript] = useState('');
-    const recognitionRef = useRef<SpeechRecognition | null>(null);
+    const recognitionRef = useRef<BrowserSpeechRecognition | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
-    const quickCommands = ['help', 'whoami', 'skills', 'projects', 'share', 'preview'];
+    const quickCommands = ['help', 'focus', 'skills', 'credentials', 'projects', 'references'];
 
     const triggerHaptics = useCallback(() => {
         if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
@@ -193,14 +291,26 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
             case 'whoami':
                 output = renderWhoami();
                 break;
+            case 'focus':
+                output = renderFocus();
+                break;
             case 'skills':
                 output = renderSkills();
+                break;
+            case 'method':
+                output = renderMethod();
+                break;
+            case 'credentials':
+                output = renderCredentials();
                 break;
             case 'experience':
                 output = renderExperience();
                 break;
             case 'projects':
                 output = renderProjects();
+                break;
+            case 'references':
+                output = renderReferences();
                 break;
             case 'contact':
                 output = renderContact();
@@ -245,17 +355,19 @@ const Terminal: React.FC<TerminalProps> = ({ onExit, onTogglePreview }) => {
     }, [onExit, onTogglePreview, startVoiceCapture, triggerHaptics, voiceSupported]);
 
     useEffect(() => {
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-        if (!SpeechRecognition) {
+        const SpeechRecognitionConstructor = (
+            (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+        ) as BrowserSpeechRecognitionConstructor | undefined;
+        if (!SpeechRecognitionConstructor) {
             setVoiceSupported(false);
             return;
         }
 
-        const recognition: SpeechRecognition = new SpeechRecognition();
+        const recognition = new SpeechRecognitionConstructor();
         recognition.lang = 'en-US';
         recognition.continuous = false;
         recognition.interimResults = true;
-        recognition.onresult = (event: SpeechRecognitionEvent) => {
+        recognition.onresult = (event: BrowserSpeechRecognitionEvent) => {
             const transcript = Array.from(event.results)
                 .map((result) => result[0].transcript)
                 .join(' ')
