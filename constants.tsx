@@ -2,66 +2,57 @@
 import React from 'react';
 import { Experience } from './types';
 
-export const PROFILE_SUMMARY = "Legacy systems discovery and integration engineer with 20+ years translating business workflows across Microsoft, Linux, web, voice, embedded and audio-visual platforms. I specialise in reverse-engineering undocumented systems, diagnosing failures across infrastructure and application boundaries, and building the middleware needed to preserve useful capability while a supportable target architecture is established. My delivery loop is AI-accelerated but evidence-led: official documentation, instrumented tests, proof-of-capability, decision records and operational runbooks.";
+export const PROFILE_SUMMARY = "Systems, DevOps and automation technologist with 20+ years translating business workflows across Microsoft, Linux, web, voice, embedded and audio-visual platforms. I specialise in reconstructing undocumented systems, diagnosing failures across infrastructure and application boundaries, and designing secure transition paths that preserve useful capability while a supportable target architecture is proven. My delivery loop is AI-accelerated but evidence-led: primary documentation, instrumented tests, proof-of-capability spikes, decision records and operational runbooks.";
 
 export const CURRENT_FOCUS = {
-  title: "Legacy SharePoint continuity, recovery & modernisation",
-  summary: "Available to augment a SharePoint or Microsoft 365 delivery team where the immediate problem is not yet a clean migration backlog: the farm is old, access is failing, business logic is poorly documented, and the least-disruptive route is still unknown.",
+  title: "Land asset platform discovery, replacement architecture & estimation",
+  summary: "Available to augment the LASP Phase 1 team where the immediate requirement is to reconstruct the operating model, test the legacy failure hypothesis, prove candidate architectures and create a pricing-grade basis for fixed-cost delivery—not assume a SharePoint lift-and-shift.",
   items: [
-    "Recover the real purpose of sites, pages, lists, workflows, custom solutions, integrations and security boundaries before selecting a replacement pattern.",
-    "Trace end-to-end access failures across certificates, TLS 1.2, SCHANNEL, WinHTTP, .NET, IIS, SQL connectivity, authentication, service accounts, SPNs and Kerberos constrained delegation.",
-    "Assess controlled continuity through Microsoft Entra Application Proxy, pre-authentication, Conditional Access and KCD without treating a proxy as a substitute for backend supportability.",
-    "Compare stabilisation, archive/read-only, a staged database-attach path to SharePoint Server Subscription Edition, and Microsoft 365/Power Platform re-platforming using evidence, operational risk, records obligations and whole-of-life cost.",
-    "Convert unknowns into proof-of-capability tests, architecture decisions, acceptance criteria, work packages and estimates that another delivery team can safely price.",
+    "Recover the real purpose of land, sales, approval, document, identity and reporting workflows before selecting a platform.",
+    "Diagnose the legacy access failure across TLS, certificates, identity, IIS, SQL, SharePoint dependencies and external publication without confusing continuity with the target architecture.",
+    "Treat Power Pages + Dataverse, model-driven Power Apps, SharePoint Online / Power Platform, custom Azure and hybrid transition as options to test rather than predetermined conclusions.",
+    "Use proof-of-capability spikes to resolve security, records, integration, performance and user-experience risks in a representative environment.",
+    "Deliver current/target architecture, option analysis, ADRs, acceptance criteria, migration waves, work packages and estimates another delivery team can safely price.",
   ],
 };
 
 export const SKILLS = {
   microsoft: {
-    label: "Legacy Microsoft, Identity & Data Security",
+    label: "Business Systems Discovery, Security & Microsoft Estate",
     items: [
-      "SharePoint 2013 discovery: farm/IIS topology, AAM, content databases, service applications, WSP/full-trust components, workflows, scheduled jobs and integration dependencies.",
-      "Windows Server, Active Directory, Entra ID, Microsoft 365, Azure, IIS, SQL Server connectivity, certificates/PKI, TLS/SCHANNEL and identity troubleshooting.",
-      "Entra Application Proxy, Integrated Windows Authentication, Kerberos constrained delegation, SPNs, Conditional Access, MFA and least-privilege access patterns.",
-      "Microsoft Graph and PowerShell automation; SharePoint information protection, DLP, sensitivity labels, audit and records-aware solution design.",
-      "Supportability analysis: controlled recovery, staged upgrade, hybrid transition, archive and re-platform options with explicit security and operational risk.",
+      "Legacy application discovery: business purpose, farm/IIS topology, data stores, integrations, custom components, workflows, jobs and identity boundaries.",
+      "Windows Server, Active Directory, Entra ID, Microsoft 365, Azure, IIS, SQL connectivity, certificates/PKI, TLS/SCHANNEL and authentication troubleshooting.",
+      "Power Platform architecture across Dataverse, Power Pages, model-driven apps, SharePoint Online, Microsoft Graph and PowerShell automation.",
+      "Data-security and records controls: least privilege, Conditional Access, MFA, DLP, sensitivity labels, audit, retention and controlled external access.",
+      "Option analysis spanning stabilisation, archive/read-only, hybrid transition, staged migration and full re-platforming with explicit operational risk.",
     ]
   },
   integration: {
     label: "Middleware, Cross-Platform Solutions & Interfaces",
     items: [
-      "Protocol and data bridges across REST APIs, webhooks, databases, files, message/event flows, identity stores and proprietary application interfaces.",
-      "Full-stack delivery using C#/.NET, PHP, Python, Java and JavaScript/TypeScript across Windows, Linux, cloud, containers and virtual machines.",
-      "Interface engineering for browsers, desktops, laptops, phones, tablets, embedded appliances, televisions, telephony/DTMF and audio-visual control surfaces.",
-      "Asterisk, SIP, IVR, Broadsoft and Cisco integrations; IP networking, VPNs, QoS and OSI-layer fault isolation.",
-      "Rapid technical acquisition through AI-assisted research and prototyping, with claims validated against primary documentation, logs, repeatable tests and working artefacts.",
+      "Protocol and data bridges across REST APIs, webhooks, databases, files, message/event flows, identity stores and proprietary interfaces.",
+      "Full-stack delivery using C#/.NET, PHP, Python and JavaScript/TypeScript across Windows, Linux, cloud, containers and virtual machines.",
+      "Interface engineering for browsers, desktops, phones, tablets, embedded appliances, televisions, telephony/DTMF and audio-visual control surfaces.",
+      "Architecture-level fault isolation across application, identity, transport, infrastructure and operational boundaries.",
+      "Rapid AI-assisted research and prototyping with claims validated against primary documentation, logs, repeatable tests and working artefacts.",
     ]
   },
   chips: [
-    "SharePoint 2013 Recovery", "M365 / Azure", "Entra App Proxy / KCD",
-    "TLS / PKI / IIS", "Data Security / DLP", "PowerShell / Graph",
+    "Business-System Discovery", "Power Platform / Dataverse", "M365 / Azure",
+    "Identity / TLS / PKI", "Data Security / Records", "PowerShell / Graph",
     "Middleware / APIs", ".NET / Python / PHP / JS", "Linux / Networking",
-    "Asterisk / SIP / DTMF", "Cross-Device UX"
+    "Legacy Recovery", "Cross-Device UX"
   ]
 };
 
 export const DELIVERY_METHOD = [
-  {
-    label: "Discover",
-    detail: "Inventory technology, data, identities, controls, business purpose, usage, exceptions and undocumented dependencies.",
-  },
-  {
-    label: "Prove",
-    detail: "Time-box the highest-risk assumptions in a representative lab or read-only environment and preserve the evidence.",
-  },
-  {
-    label: "Decide",
-    detail: "Compare continuity, upgrade, hybrid and replacement options against security, supportability, cost and operational impact.",
-  },
-  {
-    label: "Transfer",
-    detail: "Deliver diagrams, scripts, ADRs, test results, runbooks, acceptance criteria and pricing-grade work packages.",
-  },
+  { label: "Discover", detail: "Recover business purpose, technology, data, identities, controls, usage, exceptions and undocumented dependencies." },
+  { label: "Design", detail: "Define candidate architectures and the minimum proof required to compare them." },
+  { label: "Document", detail: "Capture evidence, diagrams, decisions, assumptions, risks and ownership while they are current." },
+  { label: "Deliver", detail: "Produce working spikes, acceptance criteria, transition waves and pricing-grade work packages." },
+  { label: "Distribute", detail: "Make outputs inspectable and usable by delivery, security, records, operations and executive stakeholders." },
+  { label: "Dialogue", detail: "Resolve contradictions with domain experts and keep decisions traceable." },
+  { label: "Develop", detail: "Iterate from verified feedback without losing the controlled source of truth." },
 ];
 
 export const QUALIFICATIONS = [
@@ -162,30 +153,11 @@ export const PROJECTS = [
 ];
 
 export const TECHNICAL_REFERENCES = [
-  {
-    label: "Microsoft: Enable TLS 1.2 in SharePoint Server 2013",
-    url: "https://learn.microsoft.com/en-us/sharepoint/security-for-sharepoint-server/enable-tls-and-ssl-support-in-sharepoint-2013",
-  },
-  {
-    label: "Microsoft: Publish on-premises apps with Entra Application Proxy",
-    url: "https://learn.microsoft.com/en-us/entra/identity/app-proxy/overview-what-is-app-proxy",
-  },
-  {
-    label: "Microsoft: Kerberos constrained delegation for Application Proxy",
-    url: "https://learn.microsoft.com/en-us/entra/identity/app-proxy/how-to-configure-sso-with-kcd",
-  },
-  {
-    label: "Microsoft: staged upgrade path from SharePoint Server 2013",
-    url: "https://learn.microsoft.com/en-us/sharepoint/upgrade-and-update/upgrade-from-sharepoint2013-to-sharepointserver-2019",
-  },
-  {
-    label: "Microsoft: upgrade content databases to SharePoint Server Subscription Edition",
-    url: "https://learn.microsoft.com/en-us/sharepoint/upgrade-and-update/upgrade-content-databases-subscription-edition",
-  },
-  {
-    label: "Microsoft lifecycle: SharePoint Server 2019 support ended 14 July 2026",
-    url: "https://learn.microsoft.com/en-us/lifecycle/products/sharepoint-server-2019",
-  },
+  { label: "System 8 Docs: LASP replacement discovery brief", url: "https://docs.system8.com.au/lasp-discovery/" },
+  { label: "Field note: architecture before platform selection", url: "https://blog.system8.com.au/architecture-before-platform/" },
+  { label: "System 8 Docs: secure hybrid transition pattern", url: "https://docs.system8.com.au/hybrid-transition/" },
+  { label: "System 8 way of working: Discover → Develop", url: "https://docs.system8.com.au/way-of-working/" },
+  { label: "Live System 8 interaction surface", url: "https://live.system8.com.au/" },
 ];
 
 export const CONTACT = {
