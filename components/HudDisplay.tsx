@@ -35,8 +35,8 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
       <div className="flex-grow overflow-y-auto pr-4">
         <header className="text-center mb-7">
           <h1 className="text-3xl sm:text-4xl font-bold text-yellow-400">Dylan Boekelman</h1>
-          <p className="text-base sm:text-lg text-cyan-400">Systems &amp; Automation Technologist</p>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">Microsoft 365 · systems integration · automation · technical recovery</p>
+          <p className="text-base sm:text-lg text-cyan-400">Microsoft 365 &amp; Systems Consultant</p>
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">discovery · governance · integration · automation · technical recovery</p>
         </header>
 
         <section id="profile">
@@ -45,7 +45,7 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
         </section>
 
         <section id="practice">
-          <SectionTitle>Areas of Practice</SectionTitle>
+          <SectionTitle>Consultancy Capabilities</SectionTitle>
           <div className="grid md:grid-cols-2 gap-x-8">
             {[SKILLS.microsoft, SKILLS.integration].map((group) => (
               <div key={group.label} className="mt-2">
@@ -62,7 +62,7 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
         </section>
 
         <section id="work">
-          <SectionTitle>Selected Work</SectionTitle>
+          <SectionTitle>Selected Evidence</SectionTitle>
           <div className="grid md:grid-cols-2 gap-3">
             {SELECTED_WORK.map((work) => (
               <a key={work.url} href={work.url} target="_blank" rel="noopener noreferrer" className="border border-cyan-500/35 bg-cyan-950/20 rounded-lg p-4 hover:border-cyan-400 transition-colors">
