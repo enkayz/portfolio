@@ -1,7 +1,7 @@
 import React from 'react';
 import { Experience } from './types';
 
-export const PROFILE_SUMMARY = "I build, repair and connect business systems. My work spans Microsoft 365, Azure, Power Platform, Linux, web applications, telephony and the middleware between them. I am most useful when a system is undocumented, crosses vendor boundaries or needs to move without losing its operational history.";
+export const PROFILE_SUMMARY = "Through System 8, I help organisations recover, govern and modernise business systems. The work spans Microsoft 365, Azure, Power Platform, legacy applications and the integration between them—especially where the current state is undocumented, crosses vendor boundaries or must move without losing operational history.";
 
 export const SELECTED_WORK = [
   {
