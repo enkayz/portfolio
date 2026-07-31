@@ -43,8 +43,8 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
       <div className="flex-grow overflow-y-auto pr-4">
         <header className="text-center mb-6">
             <h1 className="text-3xl sm:text-4xl font-bold text-yellow-400">Dylan Boekelman</h1>
-            <p className="text-base sm:text-lg text-cyan-400">Legacy Microsoft Systems & Integration Engineer</p>
-            <p className="text-xs sm:text-sm text-gray-400 mt-1">SharePoint recovery · Microsoft 365 · identity · middleware · technical discovery</p>
+            <p className="text-base sm:text-lg text-cyan-400">Systems, DevOps & Automation Technologist</p>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1">legacy recovery · secure re-platforming · middleware · technical discovery</p>
         </header>
 
         <section id="profile">
@@ -53,7 +53,7 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
         </section>
 
         <section id="current-focus">
-          <SectionTitle>Current Contract Focus</SectionTitle>
+          <SectionTitle>Current Opportunity</SectionTitle>
           <div className="border border-cyan-500/40 bg-cyan-950/20 rounded-lg p-4">
             <h3 className="font-bold text-yellow-400 text-base">{CURRENT_FOCUS.title}</h3>
             <p className="text-gray-300 leading-relaxed mt-2">{CURRENT_FOCUS.summary}</p>
@@ -149,9 +149,9 @@ const HudDisplay: React.FC<HudDisplayProps> = ({ onEnterShell }) => {
         </section>
 
         <section id="technical-basis">
-          <SectionTitle>Technical Basis</SectionTitle>
+          <SectionTitle>Evidence & Technical Notes</SectionTitle>
           <p className="text-gray-300 leading-relaxed">
-            SharePoint 2013 is out of support, but that fact alone does not identify the fastest safe transition. Microsoft documents TLS 1.2 enablement for SharePoint 2013 and supports publishing on-premises SharePoint through Entra Application Proxy with appropriate authentication design. Any continuity option must still address backend supportability, patch state, identity, records, data security and a defined exit path. In 2026, an on-premises upgrade assessment must target SharePoint Server Subscription Edition rather than stop at the now out-of-support 2016 or 2019 releases.
+            The current opportunity is a business-system discovery and re-platforming exercise, not a predetermined SharePoint migration. Detailed architecture reasoning, continuity patterns and source material live in the System 8 documentation and field-notes sites linked below; this portfolio keeps only the forwardable outcome summary.
           </p>
           <ul className="list-disc list-outside ml-5 text-gray-300 mt-2 space-y-1">
             {TECHNICAL_REFERENCES.map((reference) => (
