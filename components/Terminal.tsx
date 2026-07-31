@@ -52,13 +52,13 @@ const renderHelp = () => (
         <p className="text-yellow-400">Available commands:</p>
         <ul className="list-disc list-inside mt-2 space-y-1">
             <li><span className="text-green-400 font-bold">whoami</span> - Display profile summary.</li>
-            <li><span className="text-green-400 font-bold">focus</span> - Show current SharePoint/Microsoft contract focus.</li>
+            <li><span className="text-green-400 font-bold">focus</span> - Show the current LASP discovery and architecture focus.</li>
             <li><span className="text-green-400 font-bold">skills</span> - List core skills and technologies.</li>
             <li><span className="text-green-400 font-bold">method</span> - Show the evidence-led delivery method.</li>
             <li><span className="text-green-400 font-bold">credentials</span> - Show qualifications and technical standing.</li>
             <li><span className="text-green-400 font-bold">experience</span> - Show recent work experience.</li>
             <li><span className="text-green-400 font-bold">projects</span> - Display selected projects.</li>
-            <li><span className="text-green-400 font-bold">references</span> - Show the Microsoft technical basis.</li>
+            <li><span className="text-green-400 font-bold">references</span> - Open evidence and technical notes.</li>
             <li><span className="text-green-400 font-bold">contact</span> - Show contact information.</li>
             <li><span className="text-green-400 font-bold">more</span> - Additional information.</li>
             <li><span className="text-green-400 font-bold">all</span> - Display all sections.</li>
@@ -80,7 +80,7 @@ const renderWhoami = () => (
 
 const renderFocus = () => (
     <div>
-        <SectionTitle>Current Contract Focus</SectionTitle>
+        <SectionTitle>Current Opportunity</SectionTitle>
         <p className="text-yellow-400 font-bold">{CURRENT_FOCUS.title}</p>
         <p className="text-gray-300 leading-relaxed mt-1">{CURRENT_FOCUS.summary}</p>
         <ul className="list-disc list-outside ml-5 text-gray-300 mt-2 space-y-1">
@@ -175,9 +175,9 @@ const renderProjects = () => (
 
 const renderReferences = () => (
     <div>
-        <SectionTitle>Technical Basis</SectionTitle>
+        <SectionTitle>Evidence & Technical Notes</SectionTitle>
         <p className="text-gray-300 leading-relaxed">
-            SharePoint 2013 is out of support, but Microsoft documents TLS 1.2 enablement and controlled publication of on-premises SharePoint through Entra Application Proxy. A continuity option still requires a supportability, identity, data-security, records and exit-path decision. Any on-premises upgrade path should now target SharePoint Server Subscription Edition, not stop at the out-of-support 2016 or 2019 releases.
+            The current opportunity is a business-system discovery and re-platforming exercise, not a predetermined SharePoint migration. The controlled architecture reasoning, continuity patterns and source material are maintained in the linked System 8 documentation and field notes.
         </p>
         <ul className="list-disc list-outside ml-5 text-gray-300 mt-2">
             {TECHNICAL_REFERENCES.map((reference) => (
