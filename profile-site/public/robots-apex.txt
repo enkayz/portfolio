@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://system8.com.au/sitemap.xml
+Sitemap: https://system8.com.au/network-sitemap.xml
