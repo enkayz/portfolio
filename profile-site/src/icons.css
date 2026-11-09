@@ -1,0 +1,9 @@
+.link-arrow {
+  display: inline-block;
+  width: .83em;
+  height: .83em;
+  flex: 0 0 auto;
+  vertical-align: -.045em;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 12l8-8m-6 0h6v6' fill='none' stroke='%23000' stroke-width='1.55' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}

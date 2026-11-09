@@ -1,3 +1,6 @@
+https://www.system8.com.au/* https://system8.com.au/:splat 301!
+https://system8.com.au/ /system8.html 200!
+https://system8.com.au/index.html /system8.html 200!
 https://system8.com.au/robots.txt /robots-apex.txt 200!
 https://system8.com.au/sitemap.xml /sitemap-apex.xml 200!
 https://portfolio.system8.com.au/robots.txt /robots-portfolio.txt 200!

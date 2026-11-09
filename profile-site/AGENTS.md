@@ -13,3 +13,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 Use the public S8-VOICE-001 guide at https://docs.system8.com.au/writing-style-standard/. Retain Dylan’s practical Whirlpool voice and the curiosity in his user-confirmed aspirationz writing. Give concrete observations, questions and checks. Keep music and sound visible beside systems work. Describe design requirements separately from deployed capabilities, and retain necessary privacy, permission and recovery boundaries.
 
 Netlify builds this directory and publishes dist/client. Preserve the recovered public/_headers and public/_redirects and the /sites/ directory.
+
+## Public homepages — 9 November 2026
+
+Keep the domains distinct. The portfolio is Dylan's concise, printable résumé with consulting and training enquiries. The main System 8 domain opens Signal Run and links to the public projects. Each homepage should have its own canonical URL and render its links and headline in the initial HTML. Preserve the network directory and keep it usable without playing.
